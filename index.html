@@ -408,6 +408,45 @@
         </div>
     </footer>
 
+    <!-- Chatbot Widget -->
+    <div class="chatbot-toggle" id="chatbotToggle" aria-label="Mở chatbot">
+        <span class="chatbot-icon">💬</span>
+        <span class="chatbot-close-icon">✕</span>
+        <div class="chatbot-pulse"></div>
+    </div>
+
+    <div class="chatbot-popup" id="chatbotPopup">
+        <div class="chatbot-header">
+            <div class="chatbot-header-info">
+                <div class="chatbot-avatar">★</div>
+                <div>
+                    <div class="chatbot-name">Trợ lý Điện Biên Phủ</div>
+                    <div class="chatbot-status"><span class="status-dot"></span> Sẵn sàng trả lời</div>
+                </div>
+            </div>
+            <button class="chatbot-close" id="chatbotClose" aria-label="Đóng">✕</button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chat-msg bot-msg">
+                <div class="msg-avatar">★</div>
+                <div class="msg-bubble">
+                    Xin chào! 👋 Tôi là trợ lý AI về <strong>Chiến dịch Điện Biên Phủ 1954</strong>. Bạn có thể hỏi tôi bất cứ điều gì về trận đánh lịch sử này!
+                </div>
+            </div>
+        </div>
+        <div class="chatbot-suggestions" id="chatbotSuggestions">
+            <button class="suggestion-chip" data-q="Ai chỉ huy chiến dịch Điện Biên Phủ?">🎖️ Ai chỉ huy?</button>
+            <button class="suggestion-chip" data-q="Chiến dịch diễn ra bao lâu?">⏱️ Diễn ra bao lâu?</button>
+            <button class="suggestion-chip" data-q="Ý nghĩa lịch sử của chiến thắng?">🌟 Ý nghĩa lịch sử?</button>
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Hỏi về Chiến dịch Điện Biên Phủ..." autocomplete="off">
+            <button class="chatbot-send" id="chatbotSend" aria-label="Gửi">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

@@ -175,4 +175,295 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // ═══════════════════════════════════════════
+    //  CHATBOT — Gemini API
+    // ═══════════════════════════════════════════
+
+    const GEMINI_API_KEY = 'AIzaSyBAUMZ5e0mgeLMQ2Q0le5goLvzYyJjOmMQ';
+    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    const SYSTEM_PROMPT = `Bạn là một trợ lý AI chuyên gia về Chiến dịch Điện Biên Phủ (1954). Hãy trả lời các câu hỏi dựa trên kiến thức sau đây. Trả lời bằng tiếng Việt, ngắn gọn, chính xác và dễ hiểu. Sử dụng markdown đơn giản (bold, list) khi cần thiết.
+
+KIẾN THỨC VỀ CHIẾN DỊCH ĐIỆN BIÊN PHỦ:
+
+BỐI CẢNH:
+- Cuối năm 1953, sau 8 năm chiến tranh tái chiếm thuộc địa, thực dân Pháp ngày càng sa lầy tại Đông Dương.
+- Mỹ viện trợ ~80% chi phí chiến tranh cho Pháp đến năm 1954.
+- Tướng Henri Navarre đề ra "Kế hoạch Navarre" — hy vọng xoay chuyển cục diện trong 18 tháng.
+- Pháp chọn thung lũng Điện Biên Phủ (~16km², Tây Bắc Việt Nam) xây tập đoàn cứ điểm mạnh nhất Đông Dương.
+- 49 cứ điểm liên hoàn, 8 cụm có mật danh phụ nữ: Béatrice, Gabrielle, Anne-Marie, Dominique, Huguette, Claudine, Éliane, Isabelle.
+- Quân số Pháp: ban đầu ~10.800, đỉnh điểm ~16.200 binh lính (Lê Dương, dù, pháo binh, thiết giáp).
+- Sân bay Mường Thanh: 100 lượt bay/ngày. Pháp gọi đây là "pháo đài bất khả xâm phạm."
+
+NHÂN VẬT:
+- Đại tướng Võ Nguyên Giáp: Tổng Tư lệnh QĐNDVN, trực tiếp chỉ huy chiến dịch. Quyết định lịch sử chuyển từ "đánh nhanh thắng nhanh" sang "đánh chắc tiến chắc." Được mệnh danh "Napoleon Đỏ."
+- Chủ tịch Hồ Chí Minh: Căn dặn "Trận này rất quan trọng, phải đánh cho thắng. Chắc thắng mới đánh, không chắc thắng không đánh."
+- Christian de Castries: Chuẩn tướng Pháp, chỉ huy trực tiếp tại Điện Biên Phủ. Bị bắt sống lúc 17h30 ngày 7/5/1954.
+- Charles Piroth: Đại tá chỉ huy pháo binh Pháp, tự sát vì bất lực.
+
+SỨC MẠNH NHÂN DÂN:
+- ~260.000 dân công vận chuyển vũ khí, lương thực hàng trăm km đường rừng núi.
+- Xe đạp thồ mang 200-300 kg/chiếc — biểu tượng hậu cần.
+- Tinh thần "tất cả cho tiền tuyến."
+
+DIỄN BIẾN (56 ngày đêm, 13/3 – 7/5/1954):
+
+Giai đoạn chuẩn bị (11/1953 – 3/1954):
+- 20/11/1953: Pháp đổ 6 tiểu đoàn dù xuống.
+- Việt Nam kéo pháo bằng sức người lên sườn núi, đặt trong hầm đào sâu vào vách núi (bắn trực tiếp xuống).
+- Đào hệ thống giao thông hào dài hàng trăm km.
+
+Đợt 1 (13/3 – 17/3/1954): Tiêu diệt cứ điểm vòng ngoài
+- 17h 13/3/1954: Pháo khai hỏa vào Him Lam (Béatrice), mở màn chiến dịch.
+- 5 ngày tiêu diệt Him Lam, Độc Lập (Gabrielle), bức hàng Bản Kéo (Anne-Marie).
+- >2.000 lính Pháp bị loại, 25 máy bay phá hủy.
+- Đại tá Piroth tự sát.
+
+Đợt 2 (30/3 – 30/4/1954): Đánh chiếm dãy đồi phía Đông & vây lấn
+- Tấn công đồi A1, C1, D1, E — khống chế khu trung tâm Mường Thanh.
+- Đồi A1 (Éliane 2): 39 ngày đêm giằng co, biểu tượng hy sinh.
+- Chiến thuật "vây lấn": giao thông hào siết chặt.
+- Từ 28/3: không máy bay hạ cánh được, tiếp tế thả dù rơi vào trận địa ta.
+- Phong trào "săn Tây bắn tỉa."
+
+Đợt 3 (1/5 – 7/5/1954): Tổng công kích — Chiến thắng
+- Đêm 6/5: nạp ~1 tấn thuốc nổ vào đường hầm dưới đồi A1, cho nổ tung.
+- 17h30 ngày 7/5/1954: Quân đội NDVN đánh chiếm Sở chỉ huy. De Castries + toàn bộ bộ tham mưu bị bắt sống.
+- Lá cờ "Quyết chiến — Quyết thắng" tung bay trên nóc hầm.
+
+KẾT QUẢ:
+- 56 ngày đêm chiến đấu
+- 16.200 quân địch bị loại (tiêu diệt + bắt sống)
+- 62 máy bay bị bắn rơi
+- 260.000 dân công phục vụ
+- 49 cứ điểm bị tiêu diệt
+- 64 xe cơ giới thu giữ
+
+Ý NGHĨA:
+- Đối với Việt Nam: Chấm dứt ~100 năm đô hộ Pháp. Dẫn đến Hiệp định Genève (21/7/1954). Giải phóng miền Bắc.
+- Đối với thế giới: Cột mốc sụp đổ chủ nghĩa thực dân cũ. Lần đầu dân tộc thuộc địa thắng cường quốc phương Tây trong trận quyết chiến lớn. Cổ vũ phong trào giải phóng dân tộc Á-Phi-Mỹ Latinh.
+
+Hiệp định Genève (21/7/1954): Pháp công nhận độc lập, chủ quyền VN, Lào, Campuchia. Pháp rút toàn bộ quân viễn chinh.
+
+QUY TẮC TRẢ LỜI:
+- Chỉ trả lời về chiến dịch Điện Biên Phủ và các chủ đề liên quan.
+- Nếu câu hỏi ngoài phạm vi, lịch sự từ chối và gợi ý hỏi về chiến dịch.
+- Giữ câu trả lời ngắn gọn (tối đa 200 từ) trừ khi được yêu cầu chi tiết hơn.
+- Dùng emoji phù hợp để tăng tính sinh động.`;
+
+    const chatToggle = document.getElementById('chatbotToggle');
+    const chatPopup = document.getElementById('chatbotPopup');
+    const chatClose = document.getElementById('chatbotClose');
+    const chatMessages = document.getElementById('chatbotMessages');
+    const chatInput = document.getElementById('chatbotInput');
+    const chatSend = document.getElementById('chatbotSend');
+    const chatSuggestions = document.getElementById('chatbotSuggestions');
+
+    let chatHistory = [];
+    let isWaiting = false;
+
+    // Toggle chat
+    function toggleChat() {
+        const isOpen = chatPopup.classList.contains('open');
+        chatPopup.classList.toggle('open');
+        chatToggle.classList.toggle('active');
+        if (!isOpen) {
+            setTimeout(() => chatInput.focus(), 400);
+        }
+    }
+
+    chatToggle.addEventListener('click', toggleChat);
+    chatClose.addEventListener('click', toggleChat);
+
+    // Send message
+    function sendMessage(text) {
+        if (!text.trim() || isWaiting) return;
+
+        // Hide suggestions after first message
+        if (chatSuggestions) {
+            chatSuggestions.style.display = 'none';
+        }
+
+        // Add user message
+        appendMessage(text, 'user');
+        chatInput.value = '';
+
+        // Add to history
+        chatHistory.push({ role: 'user', parts: [{ text }] });
+
+        // Show typing
+        const typingEl = showTypingIndicator();
+
+        isWaiting = true;
+        chatSend.disabled = true;
+
+        // Call Gemini API
+        callGeminiAPI()
+            .then(reply => {
+                typingEl.remove();
+                appendMessage(reply, 'bot');
+                chatHistory.push({ role: 'model', parts: [{ text: reply }] });
+            })
+            .catch(err => {
+                typingEl.remove();
+                if (err.message.includes('429')) {
+                    appendMessage('⏳ API đang bận (rate limit). Vui lòng đợi vài giây rồi thử lại nhé!', 'bot');
+                } else {
+                    appendMessage('❌ Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau.', 'bot');
+                }
+                // Remove last user message from history so they can retry
+                chatHistory.pop();
+                console.error('Gemini API error:', err);
+            })
+            .finally(() => {
+                isWaiting = false;
+                chatSend.disabled = false;
+                chatInput.focus();
+            });
+    }
+
+    chatSend.addEventListener('click', () => sendMessage(chatInput.value));
+    chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage(chatInput.value);
+        }
+    });
+
+    // Suggestion chips
+    document.querySelectorAll('.suggestion-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            sendMessage(chip.getAttribute('data-q'));
+        });
+    });
+
+    // Append message to chat
+    function appendMessage(text, type) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-msg ${type}-msg`;
+
+        const avatarDiv = document.createElement('div');
+        avatarDiv.className = 'msg-avatar';
+        avatarDiv.textContent = type === 'bot' ? '★' : '👤';
+
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.className = 'msg-bubble';
+        bubbleDiv.innerHTML = type === 'bot' ? parseMarkdown(text) : escapeHtml(text);
+
+        msgDiv.appendChild(avatarDiv);
+        msgDiv.appendChild(bubbleDiv);
+        chatMessages.appendChild(msgDiv);
+
+        // Auto scroll
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Typing indicator
+    function showTypingIndicator() {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'chat-msg bot-msg';
+
+        const avatarDiv = document.createElement('div');
+        avatarDiv.className = 'msg-avatar';
+        avatarDiv.textContent = '★';
+
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.className = 'msg-bubble';
+        bubbleDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+
+        msgDiv.appendChild(avatarDiv);
+        msgDiv.appendChild(bubbleDiv);
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        return msgDiv;
+    }
+
+    // Helper: delay
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // Call Gemini API with retry for 429/503
+    async function callGeminiAPI(retries = 3) {
+        const body = {
+            system_instruction: {
+                parts: [{ text: SYSTEM_PROMPT }]
+            },
+            contents: chatHistory,
+            generationConfig: {
+                temperature: 0.7,
+                topP: 0.9,
+                maxOutputTokens: 1024
+            }
+        };
+
+        for (let attempt = 0; attempt <= retries; attempt++) {
+            const response = await fetch(GEMINI_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if ((response.status === 429 || response.status === 503) && attempt < retries) {
+                const waitTime = [10000, 20000, 40000][attempt]; // 10s, 20s, 40s
+                console.log(`API error (${response.status}). Retrying in ${waitTime / 1000}s... (attempt ${attempt + 1}/${retries})`);
+                await delay(waitTime);
+                continue;
+            }
+
+            if (!response.ok) {
+                throw new Error(`API returned ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                return data.candidates[0].content.parts[0].text;
+            }
+
+            throw new Error('Invalid API response');
+        }
+
+        throw new Error('API returned error after all retries');
+    }
+
+    // Simple markdown parser
+    function parseMarkdown(text) {
+        let html = escapeHtml(text);
+
+        // Bold: **text**
+        html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+        // Italic: *text*
+        html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+        // Unordered list items: - item or * item
+        html = html.replace(/^[\-\*]\s+(.+)$/gm, '<li>$1</li>');
+
+        // Ordered list items: 1. item
+        html = html.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
+
+        // Wrap consecutive <li> in <ul>
+        html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
+
+        // Line breaks (but not after block elements)
+        html = html.replace(/\n/g, '<br>');
+
+        // Clean up: remove <br> right after </ul> and inside <ul>
+        html = html.replace(/<\/ul><br>/g, '</ul>');
+        html = html.replace(/<ul><br>/g, '<ul>');
+        html = html.replace(/<br><li>/g, '<li>');
+
+        return html;
+    }
+
+    // Escape HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
 });
+
