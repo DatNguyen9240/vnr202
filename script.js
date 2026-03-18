@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Parallax Hero ──
     const hero = document.querySelector('.hero');
-    
+
     function parallax() {
         if (!hero) return;
         const scrolled = window.scrollY;
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //  CHATBOT — Gemini API
     // ═══════════════════════════════════════════
 
-    const GEMINI_API_KEY = 'AIzaSyBAUMZ5e0mgeLMQ2Q0le5goLvzYyJjOmMQ';
+    const GEMINI_API_KEY = 'AIzaSyBvzvafOjh8Tv63Y5_6iUfO-NCBCquBYv4';
     const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
     const SYSTEM_PROMPT = `Bạn là một trợ lý AI chuyên gia về Chiến dịch Điện Biên Phủ (1954). Hãy trả lời các câu hỏi dựa trên kiến thức sau đây. Trả lời bằng tiếng Việt, ngắn gọn, chính xác và dễ hiểu. Sử dụng markdown đơn giản (bold, list) khi cần thiết.
@@ -251,132 +251,130 @@ QUY TẮC TRẢ LỜI:
 - Giữ câu trả lời ngắn gọn (tối đa 200 từ) trừ khi được yêu cầu chi tiết hơn.
 - Dùng emoji phù hợp để tăng tính sinh động.`;
 
-    const chatToggle = document.getElementById('chatbotToggle');
-    const chatPopup = document.getElementById('chatbotPopup');
-    const chatClose = document.getElementById('chatbotClose');
-    const chatMessages = document.getElementById('chatbotMessages');
-    const chatInput = document.getElementById('chatbotInput');
-    const chatSend = document.getElementById('chatbotSend');
-    const chatSuggestions = document.getElementById('chatbotSuggestions');
+    const avatarToggle = document.getElementById('avatarToggle');
+    const qaModal = document.getElementById('qaModal');
+    const qaClose = document.getElementById('qaClose');
+    const qaWelcome = document.getElementById('qaWelcome');
+    const qaActive = document.getElementById('qaActive');
+    const qaQuestionText = document.getElementById('qaQuestionText');
+    const qaAnswerText = document.getElementById('qaAnswerText');
+    const qaInput = document.getElementById('qaInput');
+    const qaSend = document.getElementById('qaSend');
+    const avatar3d = document.getElementById('avatar3d');
+    const avatarMouth = document.getElementById('avatarMouth');
 
     let chatHistory = [];
     let isWaiting = false;
 
-    // Toggle chat
-    function toggleChat() {
-        const isOpen = chatPopup.classList.contains('open');
-        chatPopup.classList.toggle('open');
-        chatToggle.classList.toggle('active');
-        if (!isOpen) {
-            setTimeout(() => chatInput.focus(), 400);
+    // Toggle modal
+    avatarToggle.addEventListener('click', () => {
+        qaModal.classList.toggle('open');
+        avatarToggle.classList.toggle('active');
+        if (qaModal.classList.contains('open')) {
+            setTimeout(() => qaInput.focus(), 300);
         }
-    }
+    });
 
-    chatToggle.addEventListener('click', toggleChat);
-    chatClose.addEventListener('click', toggleChat);
+    qaClose.addEventListener('click', () => {
+        qaModal.classList.remove('open');
+        avatarToggle.classList.remove('active');
+        stopAvatarTalking();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && qaModal.classList.contains('open')) {
+            qaModal.classList.remove('open');
+            avatarToggle.classList.remove('active');
+            stopAvatarTalking();
+        }
+    });
 
     // Send message
-    function sendMessage(text) {
-        if (!text.trim() || isWaiting) return;
+    async function sendQuestion(text) {
+        text = text.trim();
+        if (!text || isWaiting) return;
+        isWaiting = true;
+        qaInput.value = '';
+        qaSend.disabled = true;
 
-        // Hide suggestions after first message
-        if (chatSuggestions) {
-            chatSuggestions.style.display = 'none';
+        // Show question
+        qaWelcome.style.display = 'none';
+        qaActive.style.display = 'block';
+        qaQuestionText.textContent = text;
+        qaAnswerText.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+
+        chatHistory.push({ role: 'user', parts: [{ text }] });
+        startAvatarThinking();
+
+        try {
+            const answer = await callGeminiAPI();
+            chatHistory.push({ role: 'model', parts: [{ text: answer }] });
+            stopAvatarThinking();
+            startAvatarTalking();
+            await typewriterAnswer(answer);
+        } catch (err) {
+            console.error('Gemini error:', err);
+            qaAnswerText.innerHTML = '❌ Lỗi khi gọi AI. Vui lòng thử lại sau vài giây.';
+            stopAvatarThinking();
+            stopAvatarTalking();
+            chatHistory.pop();
         }
 
-        // Add user message
-        appendMessage(text, 'user');
-        chatInput.value = '';
-
-        // Add to history
-        chatHistory.push({ role: 'user', parts: [{ text }] });
-
-        // Show typing
-        const typingEl = showTypingIndicator();
-
-        isWaiting = true;
-        chatSend.disabled = true;
-
-        // Call Gemini API
-        callGeminiAPI()
-            .then(reply => {
-                typingEl.remove();
-                appendMessage(reply, 'bot');
-                chatHistory.push({ role: 'model', parts: [{ text: reply }] });
-            })
-            .catch(err => {
-                typingEl.remove();
-                if (err.message.includes('429')) {
-                    appendMessage('⏳ API đang bận (rate limit). Vui lòng đợi vài giây rồi thử lại nhé!', 'bot');
-                } else {
-                    appendMessage('❌ Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau.', 'bot');
-                }
-                // Remove last user message from history so they can retry
-                chatHistory.pop();
-                console.error('Gemini API error:', err);
-            })
-            .finally(() => {
-                isWaiting = false;
-                chatSend.disabled = false;
-                chatInput.focus();
-            });
+        isWaiting = false;
+        qaSend.disabled = false;
+        qaInput.focus();
     }
 
-    chatSend.addEventListener('click', () => sendMessage(chatInput.value));
-    chatInput.addEventListener('keydown', (e) => {
+    // Input listeners
+    qaSend.addEventListener('click', () => sendQuestion(qaInput.value));
+    qaInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            sendMessage(chatInput.value);
+            sendQuestion(qaInput.value);
         }
     });
 
     // Suggestion chips
-    document.querySelectorAll('.suggestion-chip').forEach(chip => {
-        chip.addEventListener('click', () => {
-            sendMessage(chip.getAttribute('data-q'));
-        });
+    document.querySelectorAll('.qa-chip').forEach(chip => {
+        chip.addEventListener('click', () => sendQuestion(chip.getAttribute('data-q')));
     });
 
-    // Append message to chat
-    function appendMessage(text, type) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `chat-msg ${type}-msg`;
-
-        const avatarDiv = document.createElement('div');
-        avatarDiv.className = 'msg-avatar';
-        avatarDiv.textContent = type === 'bot' ? '★' : '👤';
-
-        const bubbleDiv = document.createElement('div');
-        bubbleDiv.className = 'msg-bubble';
-        bubbleDiv.innerHTML = type === 'bot' ? parseMarkdown(text) : escapeHtml(text);
-
-        msgDiv.appendChild(avatarDiv);
-        msgDiv.appendChild(bubbleDiv);
-        chatMessages.appendChild(msgDiv);
-
-        // Auto scroll
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Avatar animations
+    function startAvatarThinking() {
+        avatar3d.classList.add('thinking');
     }
 
-    // Typing indicator
-    function showTypingIndicator() {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'chat-msg bot-msg';
+    function stopAvatarThinking() {
+        avatar3d.classList.remove('thinking');
+    }
 
-        const avatarDiv = document.createElement('div');
-        avatarDiv.className = 'msg-avatar';
-        avatarDiv.textContent = '★';
+    function startAvatarTalking() {
+        avatar3d.classList.add('talking');
+        avatarMouth.classList.add('talking');
+    }
 
-        const bubbleDiv = document.createElement('div');
-        bubbleDiv.className = 'msg-bubble';
-        bubbleDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+    function stopAvatarTalking() {
+        avatar3d.classList.remove('talking');
+        avatarMouth.classList.remove('talking');
+    }
 
-        msgDiv.appendChild(avatarDiv);
-        msgDiv.appendChild(bubbleDiv);
-        chatMessages.appendChild(msgDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Typewriter answer
+    async function typewriterAnswer(text) {
+        const parsed = parseMarkdown(text);
+        qaAnswerText.innerHTML = '';
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = parsed;
+        const fullText = tempDiv.textContent;
+        let displayed = '';
 
-        return msgDiv;
+        for (let i = 0; i < fullText.length; i++) {
+            displayed += fullText[i];
+            qaAnswerText.textContent = displayed;
+            await delay(20);
+        }
+
+        qaAnswerText.innerHTML = parsed;
+        stopAvatarTalking();
     }
 
     // Helper: delay
@@ -387,15 +385,9 @@ QUY TẮC TRẢ LỜI:
     // Call Gemini API with retry for 429/503
     async function callGeminiAPI(retries = 3) {
         const body = {
-            system_instruction: {
-                parts: [{ text: SYSTEM_PROMPT }]
-            },
+            system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
             contents: chatHistory,
-            generationConfig: {
-                temperature: 0.7,
-                topP: 0.9,
-                maxOutputTokens: 1024
-            }
+            generationConfig: { temperature: 0.7, topP: 0.9, maxOutputTokens: 1024 }
         };
 
         for (let attempt = 0; attempt <= retries; attempt++) {
@@ -406,59 +398,38 @@ QUY TẮC TRẢ LỜI:
             });
 
             if ((response.status === 429 || response.status === 503) && attempt < retries) {
-                const waitTime = [10000, 20000, 40000][attempt]; // 10s, 20s, 40s
+                const waitTime = [10000, 20000, 40000][attempt];
                 console.log(`API error (${response.status}). Retrying in ${waitTime / 1000}s... (attempt ${attempt + 1}/${retries})`);
                 await delay(waitTime);
                 continue;
             }
 
-            if (!response.ok) {
-                throw new Error(`API returned ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`API returned ${response.status}`);
 
             const data = await response.json();
-
             if (data.candidates && data.candidates[0] && data.candidates[0].content) {
                 return data.candidates[0].content.parts[0].text;
             }
-
             throw new Error('Invalid API response');
         }
-
         throw new Error('API returned error after all retries');
     }
 
-    // Simple markdown parser
+    // Markdown parser
     function parseMarkdown(text) {
         let html = escapeHtml(text);
-
-        // Bold: **text**
         html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-
-        // Italic: *text*
         html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-        // Unordered list items: - item or * item
         html = html.replace(/^[\-\*]\s+(.+)$/gm, '<li>$1</li>');
-
-        // Ordered list items: 1. item
         html = html.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
-
-        // Wrap consecutive <li> in <ul>
         html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
-
-        // Line breaks (but not after block elements)
         html = html.replace(/\n/g, '<br>');
-
-        // Clean up: remove <br> right after </ul> and inside <ul>
         html = html.replace(/<\/ul><br>/g, '</ul>');
         html = html.replace(/<ul><br>/g, '<ul>');
         html = html.replace(/<br><li>/g, '<li>');
-
         return html;
     }
 
-    // Escape HTML
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
@@ -467,3 +438,47 @@ QUY TẮC TRẢ LỜI:
 
 });
 
+// ── Prompt Toggle & Copy (global functions) ──
+function togglePrompt(btn) {
+    const promptItem = btn.closest('.prompt-item');
+    const preview = promptItem.querySelector('.prompt-preview');
+    const full = promptItem.querySelector('.prompt-full');
+
+    if (full.style.display === 'none') {
+        full.style.display = 'block';
+        preview.style.display = 'none';
+        btn.textContent = '▲ Thu gọn';
+    } else {
+        full.style.display = 'none';
+        preview.style.display = 'block';
+        btn.textContent = '▼ Xem chi tiết';
+    }
+}
+
+function copyPrompt(btn) {
+    const promptItem = btn.closest('.prompt-item');
+    const code = promptItem.querySelector('.prompt-code');
+    if (!code) return;
+
+    navigator.clipboard.writeText(code.textContent).then(() => {
+        const original = btn.textContent;
+        btn.textContent = '✅ Đã sao chép!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = original;
+            btn.classList.remove('copied');
+        }, 2000);
+    }).catch(() => {
+        // Fallback
+        const range = document.createRange();
+        range.selectNodeContents(code);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        document.execCommand('copy');
+        sel.removeAllRanges();
+        const original = btn.textContent;
+        btn.textContent = '✅ Đã sao chép!';
+        setTimeout(() => { btn.textContent = original; }, 2000);
+    });
+}
