@@ -4,6 +4,406 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ══════════════════════════════════════════
+    //  LEAFLET TACTICAL MAP — Điện Biên Phủ
+    // ══════════════════════════════════════════
+    const mapContainer = document.getElementById('leaflet-tactical-map');
+    if (mapContainer && typeof L !== 'undefined') {
+        // Initialize map centered on Dien Bien Phu valley
+        const dbpMap = L.map('leaflet-tactical-map', {
+            center: [21.386, 103.013],
+            zoom: 14,
+            minZoom: 13,
+            maxZoom: 17,
+            zoomControl: true,
+            attributionControl: true,
+            scrollWheelZoom: true,
+            dragging: true
+        });
+
+        // Satellite terrain tile layer (Esri World Imagery)
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
+            maxZoom: 18
+        }).addTo(dbpMap);
+
+        // ── Helper: Create French position marker ──
+        function createFrenchMarker(lat, lng, name, subName, isHQ) {
+            const dotClass = isHQ ? 'french-marker-dot hq' : 'french-marker-dot';
+            const size = isHQ ? [22, 22] : [16, 16];
+            const icon = L.divIcon({
+                className: 'french-marker',
+                html: `<div class="${dotClass}"></div>`,
+                iconSize: size,
+                iconAnchor: [size[0]/2, size[1]/2]
+            });
+
+            const marker = L.marker([lat, lng], { icon }).addTo(dbpMap);
+
+            // Name label
+            marker.bindTooltip(name, {
+                permanent: true,
+                direction: isHQ ? 'bottom' : 'top',
+                offset: isHQ ? [0, 16] : [0, -12],
+                className: isHQ ? 'french-label' : 'french-label'
+            });
+
+            // Sub-name label (Vietnamese name)
+            if (subName) {
+                const subMarker = L.marker([lat, lng], {
+                    icon: L.divIcon({ className: 'hidden-anchor', iconSize: [0, 0] })
+                }).addTo(dbpMap);
+                subMarker.bindTooltip(subName, {
+                    permanent: true,
+                    direction: 'bottom',
+                    offset: isHQ ? [0, 30] : [0, 8],
+                    className: 'french-sub-label'
+                });
+            }
+
+            // Popup with info
+            marker.bindPopup(`
+                <div style="font-family: 'Inter', sans-serif; min-width: 150px;">
+                    <strong style="color: #e74c3c; font-size: 14px;">${name}</strong>
+                    ${subName ? `<br><em style="color: #999; font-size: 11px;">${subName}</em>` : ''}
+                    ${isHQ ? '<br><span style="color: #e74c3c; font-weight: 700; font-size: 10px;">SỞ CHỈ HUY</span>' : ''}
+                </div>
+            `);
+
+            return marker;
+        }
+
+        // ── Helper: Create VM Division marker ──
+        function createDivisionMarker(lat, lng, name, subName) {
+            const icon = L.divIcon({
+                className: 'vm-division-marker',
+                html: '<div class="vm-division-star">⭐</div>',
+                iconSize: [28, 28],
+                iconAnchor: [14, 14]
+            });
+
+            const marker = L.marker([lat, lng], { icon }).addTo(dbpMap);
+            marker.bindTooltip(name, {
+                permanent: true,
+                direction: 'bottom',
+                offset: [0, 14],
+                className: 'vm-label'
+            });
+
+            if (subName) {
+                const subMarker = L.marker([lat, lng], {
+                    icon: L.divIcon({ className: 'hidden-anchor', iconSize: [0, 0] })
+                }).addTo(dbpMap);
+                subMarker.bindTooltip(subName, {
+                    permanent: true,
+                    direction: 'bottom',
+                    offset: [0, 28],
+                    className: 'french-sub-label'
+                });
+            }
+
+            return marker;
+        }
+
+        // ── French Positions ──
+        // HQ: Claudine / Mường Thanh
+        createFrenchMarker(21.3845, 103.0135, 'Mường Thanh', '(Claudine)', true);
+
+        // Add HQ badge separately
+        const hqBadge = L.marker([21.3845, 103.0135], {
+            icon: L.divIcon({ className: 'hidden-anchor', iconSize: [0, 0] })
+        }).addTo(dbpMap);
+        hqBadge.bindTooltip('SỞ CHỈ HUY', {
+            permanent: true,
+            direction: 'top',
+            offset: [0, -16],
+            className: 'hq-label'
+        });
+
+        // Béatrice / Him Lam (NE)
+        createFrenchMarker(21.3965, 103.0305, 'Béatrice', 'Him Lam', false);
+
+        // Gabrielle / Độc Lập (N)
+        createFrenchMarker(21.4060, 103.0085, 'Gabrielle', 'Độc Lập', false);
+
+        // Anne-Marie / Bản Kéo (NW)
+        createFrenchMarker(21.3960, 102.9985, 'Anne-Marie', 'Bản Kéo', false);
+
+        // Huguette (W)
+        createFrenchMarker(21.3880, 103.0040, 'Huguette', null, false);
+
+        // Dominique (E)
+        createFrenchMarker(21.3905, 103.0225, 'Dominique', null, false);
+
+        // Éliane / Đồi A1 (E-SE)
+        createFrenchMarker(21.3830, 103.0235, 'Éliane', '(Đồi A1)', false);
+
+        // Isabelle (S, isolated)
+        createFrenchMarker(21.3520, 103.0130, 'Isabelle', 'Cô lập', false);
+
+        // ── French Perimeter (dashed ellipse approximation) ──
+        const perimeterPoints = [];
+        const cx = 21.3855, cy = 103.013;
+        const rx = 0.012, ry = 0.016;
+        for (let i = 0; i <= 64; i++) {
+            const angle = (i / 64) * 2 * Math.PI;
+            perimeterPoints.push([
+                cx + ry * Math.sin(angle),
+                cy + rx * Math.cos(angle)
+            ]);
+        }
+        L.polyline(perimeterPoints, {
+            color: '#e74c3c',
+            weight: 1.5,
+            opacity: 0.2,
+            dashArray: '8 5'
+        }).addTo(dbpMap);
+
+        // ── Airstrip ──
+        L.polyline([
+            [21.3895, 103.0065],
+            [21.3805, 103.0185]
+        ], {
+            color: 'rgba(255,255,255,0.25)',
+            weight: 8,
+            opacity: 0.5
+        }).addTo(dbpMap);
+
+        L.polyline([
+            [21.3895, 103.0065],
+            [21.3805, 103.0185]
+        ], {
+            color: 'rgba(255,255,255,0.4)',
+            weight: 2,
+            dashArray: '6 8'
+        }).addTo(dbpMap);
+
+        // ── Vietnamese Division Positions & Attack Arrows ──
+        const goldColor = '#f1c40f';
+        const arrowOpts = {
+            color: goldColor,
+            weight: 2.5,
+            opacity: 0.7,
+            dashArray: '10 6'
+        };
+
+        // SĐ 308 → Gabrielle (from NW)
+        createDivisionMarker(21.4200, 102.9800, 'SĐ 308', null);
+        L.polyline([[21.4200, 102.9800], [21.4060, 103.0085]], arrowOpts).addTo(dbpMap);
+
+        // SĐ 312 → Béatrice (from NE)
+        createDivisionMarker(21.4180, 103.0500, 'SĐ 312', null);
+        L.polyline([[21.4180, 103.0500], [21.3965, 103.0305]], arrowOpts).addTo(dbpMap);
+
+        // SĐ 316 → Dominique/Éliane (from E)
+        createDivisionMarker(21.3850, 103.0500, 'SĐ 316', null);
+        L.polyline([[21.3850, 103.0500], [21.3905, 103.0225]], arrowOpts).addTo(dbpMap);
+
+        // SĐ 304 → Isabelle (from S)
+        createDivisionMarker(21.3300, 103.0130, 'SĐ 304', null);
+        L.polyline([[21.3300, 103.0130], [21.3520, 103.0130]], arrowOpts).addTo(dbpMap);
+
+        // PB 351 - Pháo binh (from W)
+        createDivisionMarker(21.3860, 102.9780, 'PB 351', 'Pháo binh');
+        L.polyline([[21.3860, 102.9780], [21.3880, 103.0040]], arrowOpts).addTo(dbpMap);
+
+        // ── Connection line from HQ to Isabelle (dotted, showing isolation) ──
+        L.polyline([
+            [21.3700, 103.0135],
+            [21.3520, 103.0130]
+        ], {
+            color: '#e74c3c',
+            weight: 1,
+            opacity: 0.15,
+            dashArray: '4 8'
+        }).addTo(dbpMap);
+
+        // Invalidate size when map becomes visible
+        const mapObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    dbpMap.invalidateSize();
+                    mapObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        mapObs.observe(mapContainer);
+        setTimeout(() => { dbpMap.invalidateSize(); }, 1000);
+    }
+
+    // ══════════════════════════════════════════
+    //  LEAFLET SIEGE MAP — Vây Lấn Diagram
+    // ══════════════════════════════════════════
+    const siegeContainer = document.getElementById('leaflet-siege-map');
+    if (siegeContainer && typeof L !== 'undefined') {
+        const siegeMap = L.map('leaflet-siege-map', {
+            center: [21.385, 103.013],
+            zoom: 14,
+            minZoom: 13,
+            maxZoom: 17,
+            zoomControl: true,
+            scrollWheelZoom: true
+        });
+
+        // Satellite tiles
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri',
+            maxZoom: 18
+        }).addTo(siegeMap);
+
+        // ── French Positions ──
+        const siegePositions = [
+            { lat: 21.3845, lng: 103.0135, name: 'Claudine', isHQ: true },
+            { lat: 21.3965, lng: 103.0305, name: 'Béatrice', explosion: true },
+            { lat: 21.4060, lng: 103.0085, name: 'Gabrielle', explosion: true },
+            { lat: 21.3960, lng: 102.9985, name: 'Anne-Marie' },
+            { lat: 21.3880, lng: 103.0040, name: 'Huguette' },
+            { lat: 21.3905, lng: 103.0225, name: 'Dominique' },
+            { lat: 21.3830, lng: 103.0235, name: 'Éliane (A1)', explosion: true },
+            { lat: 21.3520, lng: 103.0130, name: 'Isabelle', isolated: true }
+        ];
+
+        siegePositions.forEach(pos => {
+            const dotClass = pos.isHQ ? 'french-marker-dot hq' : 'french-marker-dot';
+            const size = pos.isHQ ? [22, 22] : [16, 16];
+            const icon = L.divIcon({
+                className: 'french-marker',
+                html: `<div class="${dotClass}"></div>`,
+                iconSize: size,
+                iconAnchor: [size[0]/2, size[1]/2]
+            });
+
+            const marker = L.marker([pos.lat, pos.lng], { icon }).addTo(siegeMap);
+            marker.bindTooltip(pos.name, {
+                permanent: true,
+                direction: pos.isHQ ? 'center' : 'top',
+                offset: pos.isHQ ? [0, 0] : [0, -12],
+                className: pos.isHQ ? 'hq-label' : 'french-label'
+            });
+
+            // Explosion effect marker
+            if (pos.explosion) {
+                const expIcon = L.divIcon({
+                    className: 'french-marker',
+                    html: '<div class="explosion-marker-dot"></div>',
+                    iconSize: [10, 10],
+                    iconAnchor: [5, 5]
+                });
+                L.marker([pos.lat, pos.lng], { icon: expIcon }).addTo(siegeMap);
+            }
+
+            // Isolated label for Isabelle
+            if (pos.isolated) {
+                const isoMarker = L.marker([pos.lat, pos.lng], {
+                    icon: L.divIcon({ className: 'hidden-anchor', iconSize: [0, 0] })
+                }).addTo(siegeMap);
+                isoMarker.bindTooltip('cô lập', {
+                    permanent: true,
+                    direction: 'bottom',
+                    offset: [0, 14],
+                    className: 'french-sub-label'
+                });
+            }
+        });
+
+        // ── Trench Rings (concentric circles) ──
+        const trenchCenter = [21.385, 103.013];
+        L.circle(trenchCenter, {
+            radius: 1800,
+            color: '#f1c40f',
+            weight: 1.5,
+            opacity: 0.4,
+            fillColor: 'transparent',
+            fill: false,
+            dashArray: '8 5'
+        }).addTo(siegeMap);
+
+        L.circle(trenchCenter, {
+            radius: 1400,
+            color: '#f1c40f',
+            weight: 2,
+            opacity: 0.5,
+            fillColor: 'transparent',
+            fill: false,
+            dashArray: '6 4'
+        }).addTo(siegeMap);
+
+        L.circle(trenchCenter, {
+            radius: 1000,
+            color: '#f1c40f',
+            weight: 2.5,
+            opacity: 0.7,
+            fillColor: 'transparent',
+            fill: false,
+            dashArray: '5 3'
+        }).addTo(siegeMap);
+
+        // ── French Perimeter ──
+        const perimeterPts = [];
+        for (let i = 0; i <= 64; i++) {
+            const angle = (i / 64) * 2 * Math.PI;
+            perimeterPts.push([
+                21.3855 + 0.016 * Math.sin(angle),
+                103.013 + 0.012 * Math.cos(angle)
+            ]);
+        }
+        L.polyline(perimeterPts, {
+            color: '#e74c3c',
+            weight: 1.5,
+            opacity: 0.15,
+            dashArray: '5 4'
+        }).addTo(siegeMap);
+
+        // ── VM Division Positions & Attack Arrows ──
+        const goldOpts = { color: '#f1c40f', weight: 2.5, opacity: 0.7, dashArray: '10 6' };
+
+        const divisions = [
+            { lat: 21.4200, lng: 102.9800, name: 'SĐ 308', target: [21.4060, 103.0085] },
+            { lat: 21.4180, lng: 103.0500, name: 'SĐ 312', target: [21.3965, 103.0305] },
+            { lat: 21.3850, lng: 103.0500, name: 'SĐ 316', target: [21.3905, 103.0225] },
+            { lat: 21.3300, lng: 103.0130, name: 'SĐ 304', target: [21.3520, 103.0130] },
+            { lat: 21.3860, lng: 102.9780, name: 'PB 351', target: [21.3880, 103.0040] }
+        ];
+
+        divisions.forEach(div => {
+            const icon = L.divIcon({
+                className: 'vm-division-marker',
+                html: '<div class="vm-division-star">⭐</div>',
+                iconSize: [28, 28],
+                iconAnchor: [14, 14]
+            });
+
+            const marker = L.marker([div.lat, div.lng], { icon }).addTo(siegeMap);
+            marker.bindTooltip(div.name, {
+                permanent: true,
+                direction: 'bottom',
+                offset: [0, 14],
+                className: 'vm-label'
+            });
+
+            L.polyline([[div.lat, div.lng], div.target], goldOpts).addTo(siegeMap);
+        });
+
+        // ── Isolation line HQ → Isabelle ──
+        L.polyline([[21.3700, 103.0135], [21.3520, 103.0130]], {
+            color: '#e74c3c',
+            weight: 1,
+            opacity: 0.15,
+            dashArray: '4 8'
+        }).addTo(siegeMap);
+        // Invalidate size when map becomes visible
+        const siegeObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    siegeMap.invalidateSize();
+                    siegeObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        siegeObs.observe(siegeContainer);
+        setTimeout(() => { siegeMap.invalidateSize(); }, 1000);
+    }
+
     // ── Hero Animations ──
     const heroElements = document.querySelectorAll('.hero-content .animate-in');
     setTimeout(() => {

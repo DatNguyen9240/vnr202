@@ -12,6 +12,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -75,131 +76,17 @@
                 <div class="divider"></div>
             </div>
 
-            <!-- Animated Tactical Map -->
+            <!-- Interactive Tactical Map with Leaflet -->
             <div class="tactical-map reveal-up">
-                <svg viewBox="0 0 800 450" class="map-svg" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <radialGradient id="valleyFloor" cx="50%" cy="55%" r="45%">
-                            <stop offset="0%" stop-color="rgba(46,64,34,0.35)"/>
-                            <stop offset="100%" stop-color="rgba(20,30,15,0.1)"/>
-                        </radialGradient>
-                        <linearGradient id="mountainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="rgba(241,196,15,0.18)"/>
-                            <stop offset="100%" stop-color="rgba(46,64,34,0.05)"/>
-                        </linearGradient>
-                        <linearGradient id="riverGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="rgba(70,130,180,0.08)"/>
-                            <stop offset="50%" stop-color="rgba(70,130,180,0.25)"/>
-                            <stop offset="100%" stop-color="rgba(70,130,180,0.08)"/>
-                        </linearGradient>
-                        <filter id="mapGlow">
-                            <feGaussianBlur stdDeviation="2" result="blur"/>
-                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                        </filter>
-                        <filter id="posGlow">
-                            <feGaussianBlur stdDeviation="4" result="blur"/>
-                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                        </filter>
-                        <pattern id="topoLines" width="40" height="40" patternUnits="userSpaceOnUse">
-                            <path d="M0,20 Q10,15 20,20 Q30,25 40,20" fill="none" stroke="rgba(241,196,15,0.03)" stroke-width="0.5"/>
-                        </pattern>
-                    </defs>
-                    <rect width="800" height="450" fill="url(#topoLines)"/>
-                    <!-- NW Mountains with gradient fill -->
-                    <path d="M30,310 L65,235 L80,240 L115,210 L150,230 L170,295" fill="url(#mountainGrad)" stroke="rgba(241,196,15,0.15)" stroke-width="1"/>
-                    <path d="M100,320 L140,240 L160,230 L195,215 L230,260 L250,310" fill="url(#mountainGrad)" stroke="rgba(241,196,15,0.12)" stroke-width="1" opacity="0.7"/>
-                    <path d="M20,280 Q60,245 100,220 Q130,200 160,215" fill="none" stroke="rgba(241,196,15,0.08)" stroke-width="1"/>
-                    <!-- E Mountains with gradient fill -->
-                    <path d="M560,300 Q580,270 600,240 Q630,210 660,220 Q690,240 710,280" fill="url(#mountainGrad)" stroke="rgba(241,196,15,0.15)" stroke-width="1"/>
-                    <path d="M630,295 Q660,250 690,215 Q710,200 730,210 Q755,225 780,275" fill="url(#mountainGrad)" stroke="rgba(241,196,15,0.12)" stroke-width="1" opacity="0.7"/>
-                    <!-- Valley floor with radial gradient -->
-                    <ellipse cx="400" cy="240" rx="180" ry="110" fill="url(#valleyFloor)" stroke="rgba(46,64,34,0.12)" stroke-width="0.5"/>
-                    <path d="M200,350 Q300,310 400,315 Q500,310 600,330 Q680,310 800,330 L800,450 L0,450 L0,360 Q100,340 200,350Z" fill="rgba(46,64,34,0.18)"/>
-                    <!-- River with double-stroke -->
-                    <path d="M310,60 Q330,100 350,145 Q365,180 375,210 Q385,250 380,290 Q375,330 385,380 Q390,410 395,440" fill="none" stroke="url(#riverGrad)" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
-                    <path d="M310,60 Q330,100 350,145 Q365,180 375,210 Q385,250 380,290 Q375,330 385,380 Q390,410 395,440" fill="none" stroke="rgba(70,130,180,0.3)" stroke-width="2" stroke-linecap="round"/>
-                    <text x="340" y="130" fill="rgba(100,160,220,0.4)" font-size="8" font-style="italic" font-family="Lora, serif" letter-spacing="1" transform="rotate(60 340 130)">S. N&#7853;m R&#7889;m</text>
-                    <!-- Airstrip with proper markings -->
-                    <line x1="320" y1="185" x2="440" y2="270" stroke="rgba(255,255,255,0.06)" stroke-width="16" stroke-linecap="round"/>
-                    <line x1="320" y1="185" x2="440" y2="270" stroke="rgba(255,255,255,0.1)" stroke-width="6" stroke-linecap="round"/>
-                    <line x1="340" y1="198" x2="430" y2="262" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="4 6"/>
-                    <text x="395" y="248" fill="rgba(255,255,255,0.2)" font-size="7" letter-spacing="2" transform="rotate(30 395 248)">S&#194;N BAY</text>
-                    <!-- French perimeter -->
-                    <ellipse cx="395" cy="230" rx="115" ry="85" fill="rgba(231,76,60,0.02)" stroke="rgba(231,76,60,0.1)" stroke-width="1.5" stroke-dasharray="6 4"/>
-                    <!-- === FRENCH POSITIONS === -->
-                    <!-- HQ: Claudine -->
-                    <circle cx="395" cy="230" r="10" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="2" filter="url(#posGlow)" class="map-pulse french-pos"/>
-                    <rect x="378" y="242" width="34" height="14" rx="2" fill="rgba(231,76,60,0.15)" stroke="rgba(231,76,60,0.4)" stroke-width="0.5"/>
-                    <text x="395" y="251" text-anchor="middle" fill="#e74c3c" font-size="7" font-weight="700">S&#7902; CH&#7880; HUY</text>
-                    <text x="395" y="270" text-anchor="middle" fill="#e74c3c" font-size="10" font-weight="700" font-family="Playfair Display, serif">M&#432;&#7901;ng Thanh</text>
-                    <text x="395" y="282" text-anchor="middle" fill="rgba(231,76,60,0.5)" font-size="7" font-style="italic">(Claudine)</text>
-                    <!-- Beatrice / Him Lam -->
-                    <circle cx="545" cy="120" r="7" fill="rgba(231,76,60,0.25)" stroke="#e74c3c" stroke-width="1.5" class="map-pulse french-pos"/>
-                    <text x="545" y="108" text-anchor="middle" fill="#e74c3c" font-size="9" font-weight="600" font-family="Lora, serif">B&#233;atrice</text>
-                    <text x="545" y="145" text-anchor="middle" fill="rgba(231,76,60,0.35)" font-size="6">Him Lam</text>
-                    <!-- Gabrielle / Doc Lap -->
-                    <circle cx="355" cy="108" r="7" fill="rgba(231,76,60,0.25)" stroke="#e74c3c" stroke-width="1.5" class="map-pulse french-pos"/>
-                    <text x="355" y="96" text-anchor="middle" fill="#e74c3c" font-size="9" font-weight="600" font-family="Lora, serif">Gabrielle</text>
-                    <text x="355" y="130" text-anchor="middle" fill="rgba(231,76,60,0.35)" font-size="6">&#272;&#7897;c L&#7853;p</text>
-                    <!-- Anne-Marie / Ban Keo -->
-                    <circle cx="290" cy="165" r="6" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1" class="map-pulse french-pos"/>
-                    <text x="265" y="158" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="600" font-family="Lora, serif">Anne-Marie</text>
-                    <text x="265" y="168" text-anchor="middle" fill="rgba(231,76,60,0.35)" font-size="6">B&#7843;n K&#233;o</text>
-                    <!-- Huguette -->
-                    <circle cx="315" cy="220" r="6" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1" class="map-pulse french-pos"/>
-                    <text x="290" y="236" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="600" font-family="Lora, serif">Huguette</text>
-                    <!-- Dominique -->
-                    <circle cx="475" cy="195" r="6" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1" class="map-pulse french-pos"/>
-                    <text x="502" y="192" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="600" font-family="Lora, serif">Dominique</text>
-                    <!-- Eliane / A1 -->
-                    <circle cx="465" cy="235" r="7" fill="rgba(231,76,60,0.3)" stroke="#e74c3c" stroke-width="1.5" class="map-pulse french-pos"/>
-                    <text x="492" y="240" text-anchor="middle" fill="#e74c3c" font-size="9" font-weight="700" font-family="Lora, serif">&#201;liane</text>
-                    <text x="492" y="250" text-anchor="middle" fill="rgba(241,196,15,0.6)" font-size="6" font-weight="700">(&#272;&#7891;i A1)</text>
-                    <!-- Isabelle (isolated) -->
-                    <circle cx="400" cy="380" r="7" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1.5" class="map-pulse french-pos"/>
-                    <text x="425" y="383" text-anchor="start" fill="#e74c3c" font-size="9" font-weight="600" font-family="Lora, serif">Isabelle</text>
-                    <line x1="400" y1="315" x2="400" y2="373" stroke="rgba(231,76,60,0.08)" stroke-width="1" stroke-dasharray="3 5"/>
-                    <text x="410" y="348" fill="rgba(231,76,60,0.2)" font-size="6" font-style="italic">c&#244; l&#7853;p</text>
-                    <!-- === VIET MINH ATTACK ARROWS with glow === -->
-                    <line x1="720" y1="42" x2="558" y2="115" stroke="var(--gold)" stroke-width="2" stroke-dasharray="8 4" class="attack-arrow arrow-anim" filter="url(#mapGlow)"/>
-                    <polygon points="558,111 564,121 550,118" fill="var(--gold)" class="arrow-head" opacity="0.9"/>
-                    <text x="680" y="35" text-anchor="middle" fill="var(--gold)" font-size="9" font-weight="700">S&#272; 312</text>
-                    <line x1="120" y1="55" x2="340" y2="108" stroke="var(--gold)" stroke-width="2" stroke-dasharray="8 4" class="attack-arrow arrow-anim" style="animation-delay:0.8s" filter="url(#mapGlow)"/>
-                    <polygon points="337,104 345,108 339,115" fill="var(--gold)" class="arrow-head" style="animation-delay:0.8s" opacity="0.9"/>
-                    <text x="165" y="48" text-anchor="middle" fill="var(--gold)" font-size="9" font-weight="700">S&#272; 308</text>
-                    <line x1="730" y1="220" x2="488" y2="200" stroke="var(--gold)" stroke-width="2" stroke-dasharray="8 4" class="attack-arrow arrow-anim" style="animation-delay:1.6s" filter="url(#mapGlow)"/>
-                    <polygon points="491,196 483,197 488,205" fill="var(--gold)" class="arrow-head" style="animation-delay:1.6s" opacity="0.9"/>
-                    <text x="660" y="213" text-anchor="middle" fill="var(--gold)" font-size="9" font-weight="700">S&#272; 316</text>
-                    <line x1="400" y1="440" x2="400" y2="392" stroke="var(--gold)" stroke-width="2" stroke-dasharray="8 4" class="attack-arrow arrow-anim" style="animation-delay:2.4s" filter="url(#mapGlow)"/>
-                    <polygon points="396,394 404,394 400,386" fill="var(--gold)" class="arrow-head" style="animation-delay:2.4s" opacity="0.9"/>
-                    <text x="435" y="432" text-anchor="middle" fill="var(--gold)" font-size="9" font-weight="700">S&#272; 304</text>
-                    <line x1="90" y1="255" x2="278" y2="220" stroke="var(--gold)" stroke-width="2" stroke-dasharray="8 4" class="attack-arrow arrow-anim" style="animation-delay:2s" filter="url(#mapGlow)"/>
-                    <polygon points="275,216 283,218 278,225" fill="var(--gold)" class="arrow-head" style="animation-delay:2s" opacity="0.9"/>
-                    <text x="125" y="275" text-anchor="middle" fill="var(--gold)" font-size="9" font-weight="700">PB 351</text>
-                    <text x="125" y="286" text-anchor="middle" fill="rgba(241,196,15,0.4)" font-size="6">Ph&#225;o binh</text>
-                    <!-- Compass Rose -->
-                    <g transform="translate(745,385)">
-                        <circle cx="0" cy="0" r="18" fill="rgba(10,10,15,0.6)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
-                        <line x1="0" y1="-14" x2="0" y2="14" stroke="rgba(241,196,15,0.3)" stroke-width="0.5"/>
-                        <line x1="-14" y1="0" x2="14" y2="0" stroke="rgba(241,196,15,0.3)" stroke-width="0.5"/>
-                        <polygon points="0,-13 -3,-5 3,-5" fill="var(--gold)" opacity="0.7"/>
-                        <text x="0" y="-17" text-anchor="middle" fill="var(--gold)" font-size="7" font-weight="700">B</text>
-                    </g>
-                    <!-- Legend bar -->
-                    <g transform="translate(30,420)">
-                        <rect x="-10" y="-10" width="680" height="28" rx="4" fill="rgba(10,10,15,0.5)"/>
-                        <circle cx="10" cy="4" r="4" fill="#e74c3c" opacity="0.8"/>
-                        <text x="20" y="8" fill="var(--text-muted)" font-size="8">C&#7913; &#273;i&#7875;m Ph&#225;p</text>
-                        <line x1="135" y1="4" x2="160" y2="4" stroke="var(--gold)" stroke-dasharray="4 3" stroke-width="2"/>
-                        <polygon points="160,1 166,4 160,7" fill="var(--gold)"/>
-                        <text x="172" y="8" fill="var(--text-muted)" font-size="8">H&#432;&#7899;ng t&#7845;n c&#244;ng VM</text>
-                        <line x1="318" y1="4" x2="348" y2="4" stroke="rgba(255,255,255,0.12)" stroke-width="5" stroke-linecap="round"/>
-                        <text x="355" y="8" fill="var(--text-muted)" font-size="8">S&#226;n bay</text>
-                        <line x1="410" y1="4" x2="435" y2="4" stroke="rgba(70,130,180,0.4)" stroke-width="2"/>
-                        <text x="442" y="8" fill="var(--text-muted)" font-size="8">S&#244;ng N&#7853;m R&#7889;m</text>
-                    </g>
-                </svg>
-                <div class="map-caption">&#9876; S&#417; &#273;&#7891; chi&#7871;n thu&#7853;t &#8212; Thung l&#361;ng &#272;i&#7879;n Bi&#234;n Ph&#7911;, 1954</div>
+                <div id="leaflet-tactical-map"></div>
+                <!-- Legend overlay -->
+                <div class="leaflet-map-legend">
+                    <span class="legend-item"><span class="legend-dot french"></span> Cứ điểm Pháp</span>
+                    <span class="legend-item"><span class="legend-line vm"></span> Hướng tấn công VM</span>
+                    <span class="legend-item"><span class="legend-dot division"></span> Sư đoàn Việt Minh</span>
+                    <span class="legend-item"><span class="legend-line airstrip"></span> Sân bay</span>
+                </div>
+                <div class="map-caption">&#9876; Sơ đồ chiến thuật — Thung lũng Điện Biên Phủ, 1954</div>
             </div>
 
             <!-- Chapter 01 -->
@@ -286,119 +173,17 @@
                 <div class="illustration-caption">Hàng vạn bộ đội và dân công kéo pháo bằng sức người lên sườn núi — kỳ tích hậu cần vĩ đại</div>
             </div>
 
-            <!-- Animated Siege Diagram -->
+            <!-- Interactive Siege Diagram with Leaflet -->
             <div class="siege-diagram reveal-up">
                 <h4 class="siege-heading">⚔ Chiến Thuật Vây Lấn — Siết Chặt Vòng Vây</h4>
-                <svg viewBox="0 0 600 460" class="siege-svg" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <pattern id="gridPat" width="30" height="30" patternUnits="userSpaceOnUse">
-                            <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(241,196,15,0.04)" stroke-width="0.5"/>
-                        </pattern>
-                        <radialGradient id="dangerZone" cx="50%" cy="45%" r="50%">
-                            <stop offset="0%" stop-color="rgba(231,76,60,0.18)"/>
-                            <stop offset="60%" stop-color="rgba(231,76,60,0.06)"/>
-                            <stop offset="100%" stop-color="transparent"/>
-                        </radialGradient>
-                        <radialGradient id="siegeGlow" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="rgba(241,196,15,0.06)"/>
-                            <stop offset="100%" stop-color="transparent"/>
-                        </radialGradient>
-                        <filter id="glow">
-                            <feGaussianBlur stdDeviation="3" result="blur"/>
-                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                        </filter>
-                        <filter id="trenchGlow">
-                            <feGaussianBlur stdDeviation="2" result="blur"/>
-                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                        </filter>
-                    </defs>
-                    <rect width="600" height="460" fill="url(#gridPat)"/>
-                    <!-- Valley terrain -->
-                    <ellipse cx="300" cy="210" rx="240" ry="180" fill="url(#siegeGlow)"/>
-                    <!-- French perimeter -->
-                    <ellipse cx="300" cy="200" rx="105" ry="75" fill="url(#dangerZone)" stroke="rgba(231,76,60,0.15)" stroke-width="1.5" stroke-dasharray="4 3"/>
-                    <!-- Central HQ -->
-                    <rect x="272" y="186" width="56" height="28" rx="4" fill="rgba(231,76,60,0.15)" stroke="#e74c3c" stroke-width="1.5"/>
-                    <rect x="278" y="192" width="44" height="16" rx="2" fill="rgba(231,76,60,0.1)"/>
-                    <text x="300" y="204" text-anchor="middle" fill="#e74c3c" font-size="9" font-weight="700">Claudine</text>
-                    <!-- French positions with inner dots -->
-                    <circle cx="430" cy="100" r="8" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1.5"/>
-                    <circle cx="430" cy="100" r="3" fill="#e74c3c" opacity="0.5"/>
-                    <text x="430" y="86" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="600">Béatrice</text>
-                    <circle cx="270" cy="95" r="8" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1.5"/>
-                    <circle cx="270" cy="95" r="3" fill="#e74c3c" opacity="0.5"/>
-                    <text x="270" y="81" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="600">Gabrielle</text>
-                    <circle cx="210" cy="150" r="7" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1"/>
-                    <circle cx="210" cy="150" r="2.5" fill="#e74c3c" opacity="0.4"/>
-                    <text x="182" y="143" text-anchor="middle" fill="#e74c3c" font-size="8">Anne-Marie</text>
-                    <circle cx="220" cy="200" r="7" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1"/>
-                    <circle cx="220" cy="200" r="2.5" fill="#e74c3c" opacity="0.4"/>
-                    <text x="198" y="218" text-anchor="middle" fill="#e74c3c" font-size="8">Huguette</text>
-                    <circle cx="380" cy="175" r="7" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1"/>
-                    <circle cx="380" cy="175" r="2.5" fill="#e74c3c" opacity="0.4"/>
-                    <text x="408" y="172" text-anchor="middle" fill="#e74c3c" font-size="8">Dominique</text>
-                    <!-- Eliane (A1) highlighted -->
-                    <circle cx="370" cy="215" r="9" fill="rgba(231,76,60,0.3)" stroke="#e74c3c" stroke-width="2"/>
-                    <circle cx="370" cy="215" r="4" fill="#e74c3c" opacity="0.6"/>
-                    <text x="398" y="225" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="700">Éliane (A1)</text>
-                    <!-- Isabelle isolated -->
-                    <circle cx="300" cy="370" r="8" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1.5"/>
-                    <circle cx="300" cy="370" r="3" fill="#e74c3c" opacity="0.4"/>
-                    <text x="300" y="392" text-anchor="middle" fill="#e74c3c" font-size="8">Isabelle</text>
-                    <line x1="300" y1="275" x2="300" y2="362" stroke="rgba(231,76,60,0.08)" stroke-width="1" stroke-dasharray="3 5"/>
-                    <text x="310" y="330" fill="rgba(231,76,60,0.2)" font-size="6" font-style="italic">cô lập</text>
-                    <!-- Animated trench rings -->
-                    <ellipse cx="300" cy="200" rx="200" ry="155" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="6 4" class="trench-ring trench-r1" opacity="0"/>
-                    <ellipse cx="300" cy="200" rx="160" ry="125" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="trench-ring trench-r2" opacity="0" filter="url(#trenchGlow)"/>
-                    <ellipse cx="300" cy="200" rx="120" ry="88" fill="none" stroke="#f1c40f" stroke-width="2.5" stroke-dasharray="4 2" class="trench-ring trench-r3" opacity="0" filter="url(#glow)"/>
-                    <!-- Attack arrows with arrowheads -->
-                    <g class="siege-arrows">
-                        <line x1="80" y1="60" x2="215" y2="135" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="siege-arrow sa1"/>
-                        <polygon points="212,132 220,138 213,142" fill="var(--gold)" opacity="0.8"/>
-                        <line x1="520" y1="50" x2="435" y2="95" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="siege-arrow sa2"/>
-                        <polygon points="438,91 433,100 428,92" fill="var(--gold)" opacity="0.8"/>
-                        <line x1="550" y1="200" x2="400" y2="195" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="siege-arrow sa3"/>
-                        <polygon points="403,191 397,195 403,199" fill="var(--gold)" opacity="0.8"/>
-                        <line x1="80" y1="250" x2="205" y2="212" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="siege-arrow sa4"/>
-                        <polygon points="202,209 210,212 203,217" fill="var(--gold)" opacity="0.8"/>
-                        <line x1="300" y1="445" x2="300" y2="382" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="siege-arrow sa5"/>
-                        <polygon points="296,385 304,385 300,377" fill="var(--gold)" opacity="0.8"/>
-                    </g>
-                    <!-- VM Division positions -->
-                    <g text-anchor="middle">
-                        <circle cx="65" cy="48" r="14" fill="rgba(241,196,15,0.08)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
-                        <text x="65" y="52" font-size="14">⭐</text>
-                        <text x="65" y="70" fill="var(--gold)" font-size="7" font-weight="600">SĐ 308</text>
-                        <circle cx="535" cy="38" r="14" fill="rgba(241,196,15,0.08)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
-                        <text x="535" y="42" font-size="14">⭐</text>
-                        <text x="535" y="60" fill="var(--gold)" font-size="7" font-weight="600">SĐ 312</text>
-                        <circle cx="562" cy="193" r="14" fill="rgba(241,196,15,0.08)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
-                        <text x="562" y="197" font-size="14">⭐</text>
-                        <text x="562" y="215" fill="var(--gold)" font-size="7" font-weight="600">SĐ 316</text>
-                        <circle cx="65" cy="243" r="14" fill="rgba(241,196,15,0.08)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
-                        <text x="65" y="247" font-size="14">⭐</text>
-                        <text x="65" y="265" fill="var(--gold)" font-size="7" font-weight="600">PB 351</text>
-                        <circle cx="300" cy="438" r="14" fill="rgba(241,196,15,0.08)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
-                        <text x="300" y="442" font-size="14">⭐</text>
-                        <text x="300" y="458" fill="var(--gold)" font-size="7" font-weight="600">SĐ 304</text>
-                    </g>
-                    <!-- Explosion effects -->
-                    <circle cx="430" cy="100" r="4" fill="#ff6" class="explosion-dot ed1" opacity="0.8"/>
-                    <circle cx="270" cy="95" r="4" fill="#ff6" class="explosion-dot ed2" opacity="0.8"/>
-                    <circle cx="370" cy="215" r="4" fill="#ff6" class="explosion-dot ed3" opacity="0.8"/>
-                    <!-- Legend -->
-                    <g transform="translate(20,432)">
-                        <rect x="-8" y="-7" width="570" height="22" rx="3" fill="rgba(10,10,15,0.5)"/>
-                        <circle cx="8" cy="4" r="4" fill="#e74c3c" opacity="0.6"/>
-                        <text x="18" y="8" fill="var(--text-muted)" font-size="8">Cứ điểm Pháp</text>
-                        <line x1="115" y1="4" x2="140" y2="4" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="4 2"/>
-                        <text x="147" y="8" fill="var(--text-muted)" font-size="8">Chiến hào vây lấn</text>
-                        <text x="278" y="7" text-anchor="middle" font-size="8">⭐</text>
-                        <text x="290" y="8" fill="var(--text-muted)" font-size="8">Sư đoàn Việt Minh</text>
-                        <circle cx="420" cy="4" r="3" fill="#ff6" opacity="0.6"/>
-                        <text x="428" y="8" fill="var(--text-muted)" font-size="8">Điểm nổ</text>
-                    </g>
-                </svg>
+                <div id="leaflet-siege-map"></div>
+                <!-- Legend overlay -->
+                <div class="leaflet-map-legend">
+                    <span class="legend-item"><span class="legend-dot french"></span> Cứ điểm Pháp</span>
+                    <span class="legend-item"><span class="legend-line vm"></span> Chiến hào vây lấn</span>
+                    <span class="legend-item"><span class="legend-dot division"></span> Sư đoàn Việt Minh</span>
+                    <span class="legend-item"><span class="legend-dot explosion"></span> Điểm nổ</span>
+                </div>
             </div>
 
         </div>
@@ -1369,6 +1154,7 @@ Section 2 — Cách tạo ra trang web:
         <button class="qa-close" id="qaClose">✕ Đóng</button>
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>
 
