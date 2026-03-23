@@ -50,6 +50,15 @@
                 "Lừng lẫy năm châu, chấn động địa cầu"
             </p>
             <p class="hero-quote animate-in">— Chủ tịch Hồ Chí Minh —</p>
+            <div class="hero-day-counter animate-in">
+                <div class="day-block"><span class="day-num" data-target="56">0</span><span class="day-lbl">NGÀY</span></div>
+                <div class="day-sep">:</div>
+                <div class="day-block"><span class="day-num" data-target="56">0</span><span class="day-lbl">ĐÊM</span></div>
+                <div class="day-sep">•</div>
+                <div class="day-block"><span class="day-num" data-target="49">0</span><span class="day-lbl">CỨ ĐIỂM</span></div>
+                <div class="day-sep">•</div>
+                <div class="day-block"><span class="day-num" data-target="16200">0</span><span class="day-lbl">QUÂN ĐỊCH</span></div>
+            </div>
             <a href="#context" class="hero-cta animate-in">Khám phá lịch sử</a>
         </div>
         <div class="scroll-indicator">
@@ -66,56 +75,332 @@
                 <div class="divider"></div>
             </div>
 
-            <div class="context-grid">
-                <div class="context-card reveal-left">
-                    <div class="card-icon">🗺️</div>
-                    <h3>Đông Dương 1953</h3>
-                    <p>
-                        Cuối năm 1953, sau 8 năm chiến tranh tái chiếm thuộc địa, thực dân Pháp ngày càng sa lầy tại
-                        Đông Dương.
-                        Dù nhận được viện trợ lớn từ Mỹ (đến năm 1954 chiếm ~80% chi phí chiến tranh), Pháp liên tiếp
-                        thất bại trên nhiều mặt trận.
-                        Phong trào kháng chiến của Việt Minh dưới sự lãnh đạo của Chủ tịch Hồ Chí Minh ngày càng lớn
-                        mạnh.
-                    </p>
+            <!-- Animated Tactical Map -->
+            <div class="tactical-map reveal-up">
+                <svg viewBox="0 0 800 450" class="map-svg" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="valleyFloor" cx="50%" cy="55%" r="45%">
+                            <stop offset="0%" stop-color="rgba(46,64,34,0.35)"/>
+                            <stop offset="100%" stop-color="rgba(20,30,15,0.1)"/>
+                        </radialGradient>
+                        <linearGradient id="mountainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="rgba(241,196,15,0.18)"/>
+                            <stop offset="100%" stop-color="rgba(46,64,34,0.05)"/>
+                        </linearGradient>
+                        <linearGradient id="riverGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="rgba(70,130,180,0.08)"/>
+                            <stop offset="50%" stop-color="rgba(70,130,180,0.25)"/>
+                            <stop offset="100%" stop-color="rgba(70,130,180,0.08)"/>
+                        </linearGradient>
+                        <filter id="mapGlow">
+                            <feGaussianBlur stdDeviation="2" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                        <filter id="posGlow">
+                            <feGaussianBlur stdDeviation="4" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                        <pattern id="topoLines" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M0,20 Q10,15 20,20 Q30,25 40,20" fill="none" stroke="rgba(241,196,15,0.03)" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="800" height="450" fill="url(#topoLines)"/>
+                    <!-- NW Mountains with gradient fill -->
+                    <path d="M30,310 L65,235 L80,240 L115,210 L150,230 L170,295" fill="url(#mountainGrad)" stroke="rgba(241,196,15,0.15)" stroke-width="1"/>
+                    <path d="M100,320 L140,240 L160,230 L195,215 L230,260 L250,310" fill="url(#mountainGrad)" stroke="rgba(241,196,15,0.12)" stroke-width="1" opacity="0.7"/>
+                    <path d="M20,280 Q60,245 100,220 Q130,200 160,215" fill="none" stroke="rgba(241,196,15,0.08)" stroke-width="1"/>
+                    <!-- E Mountains with gradient fill -->
+                    <path d="M560,300 Q580,270 600,240 Q630,210 660,220 Q690,240 710,280" fill="url(#mountainGrad)" stroke="rgba(241,196,15,0.15)" stroke-width="1"/>
+                    <path d="M630,295 Q660,250 690,215 Q710,200 730,210 Q755,225 780,275" fill="url(#mountainGrad)" stroke="rgba(241,196,15,0.12)" stroke-width="1" opacity="0.7"/>
+                    <!-- Valley floor with radial gradient -->
+                    <ellipse cx="400" cy="240" rx="180" ry="110" fill="url(#valleyFloor)" stroke="rgba(46,64,34,0.12)" stroke-width="0.5"/>
+                    <path d="M200,350 Q300,310 400,315 Q500,310 600,330 Q680,310 800,330 L800,450 L0,450 L0,360 Q100,340 200,350Z" fill="rgba(46,64,34,0.18)"/>
+                    <!-- River with double-stroke -->
+                    <path d="M310,60 Q330,100 350,145 Q365,180 375,210 Q385,250 380,290 Q375,330 385,380 Q390,410 395,440" fill="none" stroke="url(#riverGrad)" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+                    <path d="M310,60 Q330,100 350,145 Q365,180 375,210 Q385,250 380,290 Q375,330 385,380 Q390,410 395,440" fill="none" stroke="rgba(70,130,180,0.3)" stroke-width="2" stroke-linecap="round"/>
+                    <text x="340" y="130" fill="rgba(100,160,220,0.4)" font-size="8" font-style="italic" font-family="Lora, serif" letter-spacing="1" transform="rotate(60 340 130)">S. N&#7853;m R&#7889;m</text>
+                    <!-- Airstrip with proper markings -->
+                    <line x1="320" y1="185" x2="440" y2="270" stroke="rgba(255,255,255,0.06)" stroke-width="16" stroke-linecap="round"/>
+                    <line x1="320" y1="185" x2="440" y2="270" stroke="rgba(255,255,255,0.1)" stroke-width="6" stroke-linecap="round"/>
+                    <line x1="340" y1="198" x2="430" y2="262" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="4 6"/>
+                    <text x="395" y="248" fill="rgba(255,255,255,0.2)" font-size="7" letter-spacing="2" transform="rotate(30 395 248)">S&#194;N BAY</text>
+                    <!-- French perimeter -->
+                    <ellipse cx="395" cy="230" rx="115" ry="85" fill="rgba(231,76,60,0.02)" stroke="rgba(231,76,60,0.1)" stroke-width="1.5" stroke-dasharray="6 4"/>
+                    <!-- === FRENCH POSITIONS === -->
+                    <!-- HQ: Claudine -->
+                    <circle cx="395" cy="230" r="10" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="2" filter="url(#posGlow)" class="map-pulse french-pos"/>
+                    <rect x="378" y="242" width="34" height="14" rx="2" fill="rgba(231,76,60,0.15)" stroke="rgba(231,76,60,0.4)" stroke-width="0.5"/>
+                    <text x="395" y="251" text-anchor="middle" fill="#e74c3c" font-size="7" font-weight="700">S&#7902; CH&#7880; HUY</text>
+                    <text x="395" y="270" text-anchor="middle" fill="#e74c3c" font-size="10" font-weight="700" font-family="Playfair Display, serif">M&#432;&#7901;ng Thanh</text>
+                    <text x="395" y="282" text-anchor="middle" fill="rgba(231,76,60,0.5)" font-size="7" font-style="italic">(Claudine)</text>
+                    <!-- Beatrice / Him Lam -->
+                    <circle cx="545" cy="120" r="7" fill="rgba(231,76,60,0.25)" stroke="#e74c3c" stroke-width="1.5" class="map-pulse french-pos"/>
+                    <text x="545" y="108" text-anchor="middle" fill="#e74c3c" font-size="9" font-weight="600" font-family="Lora, serif">B&#233;atrice</text>
+                    <text x="545" y="145" text-anchor="middle" fill="rgba(231,76,60,0.35)" font-size="6">Him Lam</text>
+                    <!-- Gabrielle / Doc Lap -->
+                    <circle cx="355" cy="108" r="7" fill="rgba(231,76,60,0.25)" stroke="#e74c3c" stroke-width="1.5" class="map-pulse french-pos"/>
+                    <text x="355" y="96" text-anchor="middle" fill="#e74c3c" font-size="9" font-weight="600" font-family="Lora, serif">Gabrielle</text>
+                    <text x="355" y="130" text-anchor="middle" fill="rgba(231,76,60,0.35)" font-size="6">&#272;&#7897;c L&#7853;p</text>
+                    <!-- Anne-Marie / Ban Keo -->
+                    <circle cx="290" cy="165" r="6" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1" class="map-pulse french-pos"/>
+                    <text x="265" y="158" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="600" font-family="Lora, serif">Anne-Marie</text>
+                    <text x="265" y="168" text-anchor="middle" fill="rgba(231,76,60,0.35)" font-size="6">B&#7843;n K&#233;o</text>
+                    <!-- Huguette -->
+                    <circle cx="315" cy="220" r="6" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1" class="map-pulse french-pos"/>
+                    <text x="290" y="236" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="600" font-family="Lora, serif">Huguette</text>
+                    <!-- Dominique -->
+                    <circle cx="475" cy="195" r="6" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1" class="map-pulse french-pos"/>
+                    <text x="502" y="192" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="600" font-family="Lora, serif">Dominique</text>
+                    <!-- Eliane / A1 -->
+                    <circle cx="465" cy="235" r="7" fill="rgba(231,76,60,0.3)" stroke="#e74c3c" stroke-width="1.5" class="map-pulse french-pos"/>
+                    <text x="492" y="240" text-anchor="middle" fill="#e74c3c" font-size="9" font-weight="700" font-family="Lora, serif">&#201;liane</text>
+                    <text x="492" y="250" text-anchor="middle" fill="rgba(241,196,15,0.6)" font-size="6" font-weight="700">(&#272;&#7891;i A1)</text>
+                    <!-- Isabelle (isolated) -->
+                    <circle cx="400" cy="380" r="7" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1.5" class="map-pulse french-pos"/>
+                    <text x="425" y="383" text-anchor="start" fill="#e74c3c" font-size="9" font-weight="600" font-family="Lora, serif">Isabelle</text>
+                    <line x1="400" y1="315" x2="400" y2="373" stroke="rgba(231,76,60,0.08)" stroke-width="1" stroke-dasharray="3 5"/>
+                    <text x="410" y="348" fill="rgba(231,76,60,0.2)" font-size="6" font-style="italic">c&#244; l&#7853;p</text>
+                    <!-- === VIET MINH ATTACK ARROWS with glow === -->
+                    <line x1="720" y1="42" x2="558" y2="115" stroke="var(--gold)" stroke-width="2" stroke-dasharray="8 4" class="attack-arrow arrow-anim" filter="url(#mapGlow)"/>
+                    <polygon points="558,111 564,121 550,118" fill="var(--gold)" class="arrow-head" opacity="0.9"/>
+                    <text x="680" y="35" text-anchor="middle" fill="var(--gold)" font-size="9" font-weight="700">S&#272; 312</text>
+                    <line x1="120" y1="55" x2="340" y2="108" stroke="var(--gold)" stroke-width="2" stroke-dasharray="8 4" class="attack-arrow arrow-anim" style="animation-delay:0.8s" filter="url(#mapGlow)"/>
+                    <polygon points="337,104 345,108 339,115" fill="var(--gold)" class="arrow-head" style="animation-delay:0.8s" opacity="0.9"/>
+                    <text x="165" y="48" text-anchor="middle" fill="var(--gold)" font-size="9" font-weight="700">S&#272; 308</text>
+                    <line x1="730" y1="220" x2="488" y2="200" stroke="var(--gold)" stroke-width="2" stroke-dasharray="8 4" class="attack-arrow arrow-anim" style="animation-delay:1.6s" filter="url(#mapGlow)"/>
+                    <polygon points="491,196 483,197 488,205" fill="var(--gold)" class="arrow-head" style="animation-delay:1.6s" opacity="0.9"/>
+                    <text x="660" y="213" text-anchor="middle" fill="var(--gold)" font-size="9" font-weight="700">S&#272; 316</text>
+                    <line x1="400" y1="440" x2="400" y2="392" stroke="var(--gold)" stroke-width="2" stroke-dasharray="8 4" class="attack-arrow arrow-anim" style="animation-delay:2.4s" filter="url(#mapGlow)"/>
+                    <polygon points="396,394 404,394 400,386" fill="var(--gold)" class="arrow-head" style="animation-delay:2.4s" opacity="0.9"/>
+                    <text x="435" y="432" text-anchor="middle" fill="var(--gold)" font-size="9" font-weight="700">S&#272; 304</text>
+                    <line x1="90" y1="255" x2="278" y2="220" stroke="var(--gold)" stroke-width="2" stroke-dasharray="8 4" class="attack-arrow arrow-anim" style="animation-delay:2s" filter="url(#mapGlow)"/>
+                    <polygon points="275,216 283,218 278,225" fill="var(--gold)" class="arrow-head" style="animation-delay:2s" opacity="0.9"/>
+                    <text x="125" y="275" text-anchor="middle" fill="var(--gold)" font-size="9" font-weight="700">PB 351</text>
+                    <text x="125" y="286" text-anchor="middle" fill="rgba(241,196,15,0.4)" font-size="6">Ph&#225;o binh</text>
+                    <!-- Compass Rose -->
+                    <g transform="translate(745,385)">
+                        <circle cx="0" cy="0" r="18" fill="rgba(10,10,15,0.6)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
+                        <line x1="0" y1="-14" x2="0" y2="14" stroke="rgba(241,196,15,0.3)" stroke-width="0.5"/>
+                        <line x1="-14" y1="0" x2="14" y2="0" stroke="rgba(241,196,15,0.3)" stroke-width="0.5"/>
+                        <polygon points="0,-13 -3,-5 3,-5" fill="var(--gold)" opacity="0.7"/>
+                        <text x="0" y="-17" text-anchor="middle" fill="var(--gold)" font-size="7" font-weight="700">B</text>
+                    </g>
+                    <!-- Legend bar -->
+                    <g transform="translate(30,420)">
+                        <rect x="-10" y="-10" width="680" height="28" rx="4" fill="rgba(10,10,15,0.5)"/>
+                        <circle cx="10" cy="4" r="4" fill="#e74c3c" opacity="0.8"/>
+                        <text x="20" y="8" fill="var(--text-muted)" font-size="8">C&#7913; &#273;i&#7875;m Ph&#225;p</text>
+                        <line x1="135" y1="4" x2="160" y2="4" stroke="var(--gold)" stroke-dasharray="4 3" stroke-width="2"/>
+                        <polygon points="160,1 166,4 160,7" fill="var(--gold)"/>
+                        <text x="172" y="8" fill="var(--text-muted)" font-size="8">H&#432;&#7899;ng t&#7845;n c&#244;ng VM</text>
+                        <line x1="318" y1="4" x2="348" y2="4" stroke="rgba(255,255,255,0.12)" stroke-width="5" stroke-linecap="round"/>
+                        <text x="355" y="8" fill="var(--text-muted)" font-size="8">S&#226;n bay</text>
+                        <line x1="410" y1="4" x2="435" y2="4" stroke="rgba(70,130,180,0.4)" stroke-width="2"/>
+                        <text x="442" y="8" fill="var(--text-muted)" font-size="8">S&#244;ng N&#7853;m R&#7889;m</text>
+                    </g>
+                </svg>
+                <div class="map-caption">&#9876; S&#417; &#273;&#7891; chi&#7871;n thu&#7853;t &#8212; Thung l&#361;ng &#272;i&#7879;n Bi&#234;n Ph&#7911;, 1954</div>
+            </div>
+
+            <!-- Chapter 01 -->
+            <div class="story-chapter reveal-left">
+                <div class="chapter-visual">
+                    <span class="chapter-num">01</span>
+                    <div class="chapter-icon-wrap"><span>🗺️</span></div>
                 </div>
-                <div class="context-card reveal-right">
-                    <div class="card-icon">⚔️</div>
-                    <h3>Kế Hoạch Navarre</h3>
-                    <p>
-                        Tướng Henri Navarre — Tổng chỉ huy quân Pháp — đề ra kế hoạch mang tên mình,
-                        hy vọng xoay chuyển cục diện trong 18 tháng và tìm "lối thoát danh dự" khỏi cuộc chiến.
-                        Dựa trên chiến thuật "con nhím" (hérisson) từng thành công tại Na Sản,
-                        Pháp chọn thung lũng Điện Biên Phủ — một lòng chảo rộng ~16km²,
-                        nằm ở Tây Bắc Việt Nam — xây dựng tập đoàn cứ điểm mạnh nhất Đông Dương.
-                    </p>
-                </div>
-                <div class="context-card reveal-left">
-                    <div class="card-icon">🏔️</div>
-                    <h3>Tập Đoàn Cứ Điểm</h3>
-                    <p>
-                        Pháp xây dựng hệ thống 49 cứ điểm liên hoàn, chia thành 8 cụm có tên mật danh phụ nữ:
-                        Béatrice, Gabrielle, Anne-Marie, Dominique, Huguette, Claudine, Éliane và Isabelle.
-                        Quân số ban đầu ~10.800, đỉnh điểm ~16.200 binh lính — bao gồm Lê Dương, dù, pháo binh, thiết
-                        giáp —
-                        cùng sân bay Mường Thanh có khả năng tiếp nhận 100 lượt bay/ngày.
-                        Pháp tuyên bố đây là "pháo đài bất khả xâm phạm."
-                    </p>
-                </div>
-                <div class="context-card reveal-right">
-                    <div class="card-icon">🎯</div>
-                    <h3>Quyết Định Lịch Sử</h3>
-                    <p>
-                        Bộ Chính trị Đảng Lao động Việt Nam quyết định mở Chiến dịch Điện Biên Phủ,
-                        tập trung đại bộ phận chủ lực để tiêu diệt tập đoàn cứ điểm.
-                        Ban đầu, phương châm là "đánh nhanh, thắng nhanh," nhưng sau khi phân tích kỹ tình hình,
-                        Đại tướng Võ Nguyên Giáp đưa ra quyết định mang tầm lịch sử:
-                        chuyển sang <strong>"đánh chắc, tiến chắc"</strong> — một quyết định khó khăn nhưng hoàn toàn
-                        đúng đắn,
-                        đòi hỏi hàng vạn dân công kéo pháo ngược lên núi và chuẩn bị lại toàn bộ.
-                    </p>
+                <div class="chapter-body">
+                    <h3 class="chapter-title">Đông Dương 1953</h3>
+                    <div class="chapter-facts">
+                        <span class="fact-chip">8 năm sa lầy</span>
+                        <span class="fact-chip accent">Mỹ viện trợ ~80%</span>
+                        <span class="fact-chip">Pháp liên tiếp thất bại</span>
+                    </div>
+                    <p class="chapter-text">Cuối năm 1953, thực dân Pháp ngày càng sa lầy tại Đông Dương. Dù nhận viện trợ lớn từ Mỹ (chiếm ~80% chi phí chiến tranh), Pháp liên tiếp thất bại.</p>
+                    <blockquote class="chapter-highlight">Phong trào kháng chiến của Việt Minh dưới sự lãnh đạo của Chủ tịch Hồ Chí Minh ngày càng lớn mạnh.</blockquote>
                 </div>
             </div>
+
+            <!-- Chapter 02 -->
+            <div class="story-chapter reverse reveal-right">
+                <div class="chapter-visual">
+                    <span class="chapter-num">02</span>
+                    <div class="chapter-icon-wrap"><span>⚔️</span></div>
+                </div>
+                <div class="chapter-body">
+                    <h3 class="chapter-title">Kế Hoạch Navarre</h3>
+                    <div class="chapter-facts">
+                        <span class="fact-chip">Henri Navarre</span>
+                        <span class="fact-chip accent">18 tháng xoay chuyển</span>
+                        <span class="fact-chip">~16 km² thung lũng</span>
+                    </div>
+                    <p class="chapter-text">Tướng Henri Navarre đề ra kế hoạch mang tên mình, hy vọng tìm "lối thoát danh dự" khỏi cuộc chiến. Dựa trên chiến thuật "con nhím" (hérisson) từng thành công tại Na Sản.</p>
+                    <blockquote class="chapter-highlight">Pháp chọn thung lũng Điện Biên Phủ — một lòng chảo rộng ~16km² — xây dựng tập đoàn cứ điểm mạnh nhất Đông Dương.</blockquote>
+                </div>
+            </div>
+
+            <!-- Chapter 03 -->
+            <div class="story-chapter reveal-left">
+                <div class="chapter-visual">
+                    <span class="chapter-num">03</span>
+                    <div class="chapter-icon-wrap"><span>🏔️</span></div>
+                </div>
+                <div class="chapter-body">
+                    <h3 class="chapter-title">Tập Đoàn Cứ Điểm</h3>
+                    <div class="chapter-facts">
+                        <span class="fact-chip accent">49 cứ điểm</span>
+                        <span class="fact-chip">8 cụm mật danh</span>
+                        <span class="fact-chip">~16.200 quân</span>
+                        <span class="fact-chip accent">100 lượt bay/ngày</span>
+                    </div>
+                    <div class="codename-strip">
+                        <span>Béatrice</span><span>Gabrielle</span><span>Anne-Marie</span><span>Dominique</span><span>Huguette</span><span>Claudine</span><span>Éliane</span><span>Isabelle</span>
+                    </div>
+                    <blockquote class="chapter-highlight">Pháp tuyên bố đây là <strong>"pháo đài bất khả xâm phạm."</strong></blockquote>
+                </div>
+            </div>
+
+            <!-- Chapter 04 -->
+            <div class="story-chapter reverse reveal-right">
+                <div class="chapter-visual">
+                    <span class="chapter-num">04</span>
+                    <div class="chapter-icon-wrap"><span>🎯</span></div>
+                </div>
+                <div class="chapter-body">
+                    <h3 class="chapter-title">Quyết Định Lịch Sử</h3>
+                    <div class="chapter-facts">
+                        <span class="fact-chip">Bộ Chính trị quyết định</span>
+                        <span class="fact-chip accent">Đại tướng Võ Nguyên Giáp</span>
+                    </div>
+                    <p class="chapter-text">Ban đầu phương châm là "đánh nhanh, thắng nhanh" — nhưng sau khi phân tích kỹ tình hình, Đại tướng đưa ra quyết định mang tầm lịch sử:</p>
+                    <div class="doctrine-shift">
+                        <span class="old-doctrine">Đánh nhanh, thắng nhanh</span>
+                        <span class="doctrine-arrow">→</span>
+                        <span class="new-doctrine">Đánh chắc, tiến chắc</span>
+                    </div>
+                    <p class="chapter-text-sm">Một quyết định khó khăn, đòi hỏi hàng vạn dân công kéo pháo ngược lên núi và chuẩn bị lại toàn bộ.</p>
+                </div>
+            </div>
+
+            <div class="chapter-illustration reveal-up">
+                <img src="images/keo_phao.png" alt="Dân công kéo pháo lên núi" loading="lazy">
+                <div class="illustration-caption">Hàng vạn bộ đội và dân công kéo pháo bằng sức người lên sườn núi — kỳ tích hậu cần vĩ đại</div>
+            </div>
+
+            <!-- Animated Siege Diagram -->
+            <div class="siege-diagram reveal-up">
+                <h4 class="siege-heading">⚔ Chiến Thuật Vây Lấn — Siết Chặt Vòng Vây</h4>
+                <svg viewBox="0 0 600 460" class="siege-svg" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="gridPat" width="30" height="30" patternUnits="userSpaceOnUse">
+                            <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(241,196,15,0.04)" stroke-width="0.5"/>
+                        </pattern>
+                        <radialGradient id="dangerZone" cx="50%" cy="45%" r="50%">
+                            <stop offset="0%" stop-color="rgba(231,76,60,0.18)"/>
+                            <stop offset="60%" stop-color="rgba(231,76,60,0.06)"/>
+                            <stop offset="100%" stop-color="transparent"/>
+                        </radialGradient>
+                        <radialGradient id="siegeGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="rgba(241,196,15,0.06)"/>
+                            <stop offset="100%" stop-color="transparent"/>
+                        </radialGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                        <filter id="trenchGlow">
+                            <feGaussianBlur stdDeviation="2" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                    </defs>
+                    <rect width="600" height="460" fill="url(#gridPat)"/>
+                    <!-- Valley terrain -->
+                    <ellipse cx="300" cy="210" rx="240" ry="180" fill="url(#siegeGlow)"/>
+                    <!-- French perimeter -->
+                    <ellipse cx="300" cy="200" rx="105" ry="75" fill="url(#dangerZone)" stroke="rgba(231,76,60,0.15)" stroke-width="1.5" stroke-dasharray="4 3"/>
+                    <!-- Central HQ -->
+                    <rect x="272" y="186" width="56" height="28" rx="4" fill="rgba(231,76,60,0.15)" stroke="#e74c3c" stroke-width="1.5"/>
+                    <rect x="278" y="192" width="44" height="16" rx="2" fill="rgba(231,76,60,0.1)"/>
+                    <text x="300" y="204" text-anchor="middle" fill="#e74c3c" font-size="9" font-weight="700">Claudine</text>
+                    <!-- French positions with inner dots -->
+                    <circle cx="430" cy="100" r="8" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1.5"/>
+                    <circle cx="430" cy="100" r="3" fill="#e74c3c" opacity="0.5"/>
+                    <text x="430" y="86" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="600">Béatrice</text>
+                    <circle cx="270" cy="95" r="8" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1.5"/>
+                    <circle cx="270" cy="95" r="3" fill="#e74c3c" opacity="0.5"/>
+                    <text x="270" y="81" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="600">Gabrielle</text>
+                    <circle cx="210" cy="150" r="7" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1"/>
+                    <circle cx="210" cy="150" r="2.5" fill="#e74c3c" opacity="0.4"/>
+                    <text x="182" y="143" text-anchor="middle" fill="#e74c3c" font-size="8">Anne-Marie</text>
+                    <circle cx="220" cy="200" r="7" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1"/>
+                    <circle cx="220" cy="200" r="2.5" fill="#e74c3c" opacity="0.4"/>
+                    <text x="198" y="218" text-anchor="middle" fill="#e74c3c" font-size="8">Huguette</text>
+                    <circle cx="380" cy="175" r="7" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1"/>
+                    <circle cx="380" cy="175" r="2.5" fill="#e74c3c" opacity="0.4"/>
+                    <text x="408" y="172" text-anchor="middle" fill="#e74c3c" font-size="8">Dominique</text>
+                    <!-- Eliane (A1) highlighted -->
+                    <circle cx="370" cy="215" r="9" fill="rgba(231,76,60,0.3)" stroke="#e74c3c" stroke-width="2"/>
+                    <circle cx="370" cy="215" r="4" fill="#e74c3c" opacity="0.6"/>
+                    <text x="398" y="225" text-anchor="middle" fill="#e74c3c" font-size="8" font-weight="700">Éliane (A1)</text>
+                    <!-- Isabelle isolated -->
+                    <circle cx="300" cy="370" r="8" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1.5"/>
+                    <circle cx="300" cy="370" r="3" fill="#e74c3c" opacity="0.4"/>
+                    <text x="300" y="392" text-anchor="middle" fill="#e74c3c" font-size="8">Isabelle</text>
+                    <line x1="300" y1="275" x2="300" y2="362" stroke="rgba(231,76,60,0.08)" stroke-width="1" stroke-dasharray="3 5"/>
+                    <text x="310" y="330" fill="rgba(231,76,60,0.2)" font-size="6" font-style="italic">cô lập</text>
+                    <!-- Animated trench rings -->
+                    <ellipse cx="300" cy="200" rx="200" ry="155" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="6 4" class="trench-ring trench-r1" opacity="0"/>
+                    <ellipse cx="300" cy="200" rx="160" ry="125" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="trench-ring trench-r2" opacity="0" filter="url(#trenchGlow)"/>
+                    <ellipse cx="300" cy="200" rx="120" ry="88" fill="none" stroke="#f1c40f" stroke-width="2.5" stroke-dasharray="4 2" class="trench-ring trench-r3" opacity="0" filter="url(#glow)"/>
+                    <!-- Attack arrows with arrowheads -->
+                    <g class="siege-arrows">
+                        <line x1="80" y1="60" x2="215" y2="135" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="siege-arrow sa1"/>
+                        <polygon points="212,132 220,138 213,142" fill="var(--gold)" opacity="0.8"/>
+                        <line x1="520" y1="50" x2="435" y2="95" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="siege-arrow sa2"/>
+                        <polygon points="438,91 433,100 428,92" fill="var(--gold)" opacity="0.8"/>
+                        <line x1="550" y1="200" x2="400" y2="195" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="siege-arrow sa3"/>
+                        <polygon points="403,191 397,195 403,199" fill="var(--gold)" opacity="0.8"/>
+                        <line x1="80" y1="250" x2="205" y2="212" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="siege-arrow sa4"/>
+                        <polygon points="202,209 210,212 203,217" fill="var(--gold)" opacity="0.8"/>
+                        <line x1="300" y1="445" x2="300" y2="382" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 3" class="siege-arrow sa5"/>
+                        <polygon points="296,385 304,385 300,377" fill="var(--gold)" opacity="0.8"/>
+                    </g>
+                    <!-- VM Division positions -->
+                    <g text-anchor="middle">
+                        <circle cx="65" cy="48" r="14" fill="rgba(241,196,15,0.08)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
+                        <text x="65" y="52" font-size="14">⭐</text>
+                        <text x="65" y="70" fill="var(--gold)" font-size="7" font-weight="600">SĐ 308</text>
+                        <circle cx="535" cy="38" r="14" fill="rgba(241,196,15,0.08)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
+                        <text x="535" y="42" font-size="14">⭐</text>
+                        <text x="535" y="60" fill="var(--gold)" font-size="7" font-weight="600">SĐ 312</text>
+                        <circle cx="562" cy="193" r="14" fill="rgba(241,196,15,0.08)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
+                        <text x="562" y="197" font-size="14">⭐</text>
+                        <text x="562" y="215" fill="var(--gold)" font-size="7" font-weight="600">SĐ 316</text>
+                        <circle cx="65" cy="243" r="14" fill="rgba(241,196,15,0.08)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
+                        <text x="65" y="247" font-size="14">⭐</text>
+                        <text x="65" y="265" fill="var(--gold)" font-size="7" font-weight="600">PB 351</text>
+                        <circle cx="300" cy="438" r="14" fill="rgba(241,196,15,0.08)" stroke="rgba(241,196,15,0.2)" stroke-width="0.5"/>
+                        <text x="300" y="442" font-size="14">⭐</text>
+                        <text x="300" y="458" fill="var(--gold)" font-size="7" font-weight="600">SĐ 304</text>
+                    </g>
+                    <!-- Explosion effects -->
+                    <circle cx="430" cy="100" r="4" fill="#ff6" class="explosion-dot ed1" opacity="0.8"/>
+                    <circle cx="270" cy="95" r="4" fill="#ff6" class="explosion-dot ed2" opacity="0.8"/>
+                    <circle cx="370" cy="215" r="4" fill="#ff6" class="explosion-dot ed3" opacity="0.8"/>
+                    <!-- Legend -->
+                    <g transform="translate(20,432)">
+                        <rect x="-8" y="-7" width="570" height="22" rx="3" fill="rgba(10,10,15,0.5)"/>
+                        <circle cx="8" cy="4" r="4" fill="#e74c3c" opacity="0.6"/>
+                        <text x="18" y="8" fill="var(--text-muted)" font-size="8">Cứ điểm Pháp</text>
+                        <line x1="115" y1="4" x2="140" y2="4" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="4 2"/>
+                        <text x="147" y="8" fill="var(--text-muted)" font-size="8">Chiến hào vây lấn</text>
+                        <text x="278" y="7" text-anchor="middle" font-size="8">⭐</text>
+                        <text x="290" y="8" fill="var(--text-muted)" font-size="8">Sư đoàn Việt Minh</text>
+                        <circle cx="420" cy="4" r="3" fill="#ff6" opacity="0.6"/>
+                        <text x="428" y="8" fill="var(--text-muted)" font-size="8">Điểm nổ</text>
+                    </g>
+                </svg>
+            </div>
+
         </div>
     </section>
 
@@ -180,19 +465,44 @@
                 </div>
             </div>
 
-            <!-- People's effort -->
+            <!-- People's effort — Supply Route Infographic -->
             <div class="people-effort reveal-up">
-                <div class="effort-content">
-                    <h3>🚲 Sức Mạnh Nhân Dân</h3>
-                    <p>
-                        Gần <strong>260.000 dân công</strong> từ khắp các tỉnh miền Bắc và Bắc Trung Bộ đã vận chuyển
-                        hàng vạn tấn vũ khí,
-                        lương thực trên quãng đường hàng trăm km đường rừng núi hiểm trở.
-                        Xe đạp thồ — mỗi chiếc mang được 200-300 kg — trở thành biểu tượng hậu cần của chiến dịch.
-                        Đây là cuộc huy động sức dân vĩ đại, thể hiện tinh thần <strong>"tất cả cho tiền
-                            tuyến"</strong>.
-                    </p>
+                <h3 class="effort-heading">🚲 Sức Mạnh Nhân Dân</h3>
+                <div class="supply-route">
+                    <div class="route-stop">
+                        <div class="stop-beacon"><span>👥</span></div>
+                        <strong class="stop-value">260.000</strong>
+                        <span class="stop-label">Dân công hỏa tuyến</span>
+                    </div>
+                    <div class="route-path"><div class="path-flow"></div></div>
+                    <div class="route-stop">
+                        <div class="stop-beacon"><span>🚲</span></div>
+                        <strong class="stop-value">200-300 kg</strong>
+                        <span class="stop-label">Mỗi xe đạp thồ</span>
+                    </div>
+                    <div class="route-path"><div class="path-flow"></div></div>
+                    <div class="route-stop">
+                        <div class="stop-beacon"><span>⛰️</span></div>
+                        <strong class="stop-value">500+ km</strong>
+                        <span class="stop-label">Đường rừng núi</span>
+                    </div>
+                    <div class="route-path"><div class="path-flow"></div></div>
+                    <div class="route-stop">
+                        <div class="stop-beacon"><span>🏆</span></div>
+                        <strong class="stop-value">Chiến thắng</strong>
+                        <span class="stop-label">"Tất cả cho tiền tuyến"</span>
+                    </div>
                 </div>
+                <p class="effort-caption">
+                    Xe đạp thồ trở thành biểu tượng hậu cần vĩ đại — mỗi chiếc mang được 200-300 kg vũ khí,
+
+                <div class="chapter-illustration reveal-up" style="margin-top:24px">
+                    <img src="images/xe_dap_tho.png" alt="Xe đạp thồ vận chuyển lương thực" loading="lazy">
+                    <div class="illustration-caption">Xe đạp thồ — biểu tượng hậu cần, mỗi chiếc mang 200-300 kg qua hàng trăm km đường rừng</div>
+                </div>
+                    lương thực qua hàng trăm km đường rừng núi hiểm trở, thể hiện tinh thần đoàn kết
+                    bất khuất của dân tộc Việt Nam.
+                </p>
             </div>
         </div>
     </section>
@@ -206,98 +516,322 @@
                 <div class="divider"></div>
             </div>
 
-            <div class="timeline">
-                <!-- Preparation -->
-                <div class="timeline-item reveal-left">
-                    <div class="timeline-marker prep-marker"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">Tháng 11/1953 – Tháng 3/1954</span>
-                        <h3>Giai Đoạn Chuẩn Bị</h3>
-                        <p>
-                            Ngày 20/11/1953, Pháp đổ 6 tiểu đoàn dù xuống Điện Biên Phủ, bắt đầu xây dựng tập đoàn cứ
-                            điểm.
-                            Phía Việt Nam, hàng vạn bộ đội và dân công hành quân trong bí mật, kéo pháo
-                            bằng sức người lên các sườn núi cao bao quanh thung lũng. Pháo binh được đặt trong
-                            hầm đào sâu vào vách núi, có thể bắn trực tiếp xuống — điều Pháp không ngờ tới.
-                            Hệ thống giao thông hào dài hàng trăm km được đào để bộ đội tiếp cận các cứ điểm.
-                        </p>
+            <!-- War Timeline Visual -->
+            <div class="war-timeline-strip reveal-up">
+                <div class="wt-node active"><span>Chuẩn bị</span></div>
+                <div class="wt-line"><div class="wt-progress" data-progress="100"></div></div>
+                <div class="wt-node active"><span>Đợt 1</span></div>
+                <div class="wt-line"><div class="wt-progress" data-progress="100"></div></div>
+                <div class="wt-node active"><span>Đợt 2</span></div>
+                <div class="wt-line"><div class="wt-progress" data-progress="100"></div></div>
+                <div class="wt-node victory-node"><span>🏆</span></div>
+            </div>
+
+            <!-- PHASE 0: Preparation -->
+            <div class="battle-chapter reveal-up">
+                <div class="bc-header prep">
+                    <span class="bc-date">11/1953 – 3/1954</span>
+                    <div class="bc-phase-tag">Chuẩn bị</div>
+                    <h3 class="bc-title">Giai Đoạn Chuẩn Bị</h3>
+                </div>
+                <div class="bc-moments">
+                    <div class="bc-moment">
+                        <span class="moment-icon">🪂</span>
+                        <div><strong>20/11/1953</strong> — Pháp đổ 6 tiểu đoàn dù xuống Điện Biên Phủ, bắt đầu xây dựng tập đoàn cứ điểm.</div>
+                    </div>
+                    <div class="bc-moment">
+                        <span class="moment-icon">💪</span>
+                        <div>Hàng vạn bộ đội và dân công <strong>kéo pháo bằng sức người</strong> lên sườn núi cao — pháo binh đặt trong hầm đào sâu vào vách núi.</div>
+                    </div>
+                    <div class="bc-moment">
+                        <span class="moment-icon">🕳️</span>
+                        <div>Hệ thống giao thông hào dài <strong>hàng trăm km</strong> được đào để tiếp cận cứ điểm — điều Pháp không ngờ tới.</div>
+
+                    <div class="bc-moment">
+                        <span class="moment-icon">📸</span>
+                        <div class="chapter-illustration reveal-up" style="margin:8px 0">
+                            <img src="images/trench_system.png" alt="Hệ thống giao thông hào" loading="lazy">
+                            <div class="illustration-caption">Hệ thống giao thông hào tiếp cận cứ điểm — Điện Biên Phủ 1954</div>
+                        </div>
+                    </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Phase 1 -->
-                <div class="timeline-item reveal-right">
-                    <div class="timeline-marker phase1-marker"></div>
-                    <div class="timeline-content phase1">
-                        <span class="timeline-date">13/3 – 17/3/1954</span>
-                        <span class="phase-badge">Đợt 1</span>
-                        <h3>Tiêu Diệt Cứ Điểm Vòng Ngoài</h3>
-                        <p>
-                            <strong>17h ngày 13/3/1954</strong> — Những loạt pháo đầu tiên dội xuống cứ điểm <em>Him Lam
-                                (Béatrice)</em>,
-                            mở màn chiến dịch. Cường độ và độ chính xác của pháo binh Việt Nam khiến Pháp kinh hoàng —
-                            họ không tin rằng Việt Minh có thể đưa pháo lên núi.
-                        </p>
-                        <p>
-                            Chỉ trong 5 ngày, quân ta lần lượt tiêu diệt các cứ điểm <em>Him Lam, Độc Lập
-                                (Gabrielle)</em>
-                            và bức hàng <em>Bản Kéo (Anne-Marie)</em>, phá vỡ cửa ngõ phía Bắc.
-                            Hơn <strong>2.000 lính Pháp</strong> bị loại khỏi vòng chiến đấu, 25 máy bay bị phá hủy.
-                        </p>
-                        <p>
-                            Đại tá <em>Charles Piroth</em> — chỉ huy pháo binh Pháp — đã tự sát vì bất lực,
-                            sau khi từng tuyên bố sẽ "bịt miệng" pháo Việt Minh.
-                        </p>
+            <!-- Force Comparison Visual -->
+            <div class="force-comparison reveal-up">
+                <h4 class="force-title">⚖ Tương Quan Lực Lượng</h4>
+                <div class="force-rows">
+                    <div class="force-row">
+                        <div class="force-side vn-side">
+                            <span class="force-val">55.000</span>
+                            <div class="force-bar-wrap"><div class="force-bar vn-bar" data-width="78"></div></div>
+                        </div>
+                        <div class="force-label">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="var(--gold)" stroke-width="1.5"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round"/></svg>
+                            <span>Bộ binh</span>
+                        </div>
+                        <div class="force-side fr-side">
+                            <div class="force-bar-wrap"><div class="force-bar fr-bar" data-width="45"></div></div>
+                            <span class="force-val">16.200</span>
+                        </div>
+                    </div>
+                    <div class="force-row">
+                        <div class="force-side vn-side">
+                            <span class="force-val">200+</span>
+                            <div class="force-bar-wrap"><div class="force-bar vn-bar" data-width="85"></div></div>
+                        </div>
+                        <div class="force-label">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="12" width="18" height="6" rx="2" stroke="var(--gold)" stroke-width="1.5"/><circle cx="12" cy="10" r="3" stroke="var(--gold)" stroke-width="1.5"/><line x1="12" y1="7" x2="12" y2="4" stroke="var(--gold)" stroke-width="1.5"/></svg>
+                            <span>Pháo binh</span>
+                        </div>
+                        <div class="force-side fr-side">
+                            <div class="force-bar-wrap"><div class="force-bar fr-bar" data-width="40"></div></div>
+                            <span class="force-val">~40 khẩu</span>
+                        </div>
+                    </div>
+                    <div class="force-row">
+                        <div class="force-side vn-side">
+                            <span class="force-val">0</span>
+                            <div class="force-bar-wrap"><div class="force-bar vn-bar" data-width="0"></div></div>
+                        </div>
+                        <div class="force-label">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M2 14 L12 6 L22 14" stroke="var(--gold)" stroke-width="1.5" fill="none"/><line x1="6" y1="14" x2="18" y2="14" stroke="var(--gold)" stroke-width="1.5"/></svg>
+                            <span>Không quân</span>
+                        </div>
+                        <div class="force-side fr-side">
+                            <div class="force-bar-wrap"><div class="force-bar fr-bar" data-width="90"></div></div>
+                            <span class="force-val">100+ máy bay</span>
+                        </div>
+                    </div>
+                    <div class="force-row">
+                        <div class="force-side vn-side">
+                            <span class="force-val">260.000</span>
+                            <div class="force-bar-wrap"><div class="force-bar vn-bar" data-width="100"></div></div>
+                        </div>
+                        <div class="force-label">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M9 12 L2 19 L7 19 L9 22 L12 16 L15 22 L17 19 L22 19 L15 12" stroke="var(--gold)" stroke-width="1.5" fill="none"/><circle cx="12" cy="7" r="3" stroke="var(--gold)" stroke-width="1.5"/></svg>
+                            <span>Dân công</span>
+                        </div>
+                        <div class="force-side fr-side">
+                            <div class="force-bar-wrap"><div class="force-bar fr-bar" data-width="5"></div></div>
+                            <span class="force-val">—</span>
+                        </div>
                     </div>
                 </div>
+                <div class="force-legend">
+                    <span class="fl-vn">⭐ Việt Minh</span>
+                    <span class="fl-fr">🔴 Pháp</span>
+                </div>
+            </div>
 
-                <!-- Phase 2 -->
-                <div class="timeline-item reveal-left">
-                    <div class="timeline-marker phase2-marker"></div>
-                    <div class="timeline-content phase2">
-                        <span class="timeline-date">30/3 – 30/4/1954</span>
-                        <span class="phase-badge">Đợt 2</span>
-                        <h3>Đánh Chiếm Dãy Đồi Phía Đông & Vây Lấn</h3>
-                        <p>
-                            Đây là giai đoạn ác liệt và dai dẳng nhất. Quân ta đồng loạt tấn công
-                            các cao điểm phía Đông: <em>đồi A1, C1, D1, E</em> — những vị trí then chốt
-                            khống chế khu trung tâm Mường Thanh.
-                        </p>
-                        <p>
-                            Riêng <strong>đồi A1</strong> (Éliane 2) diễn ra 39 ngày đêm giằng co khốc liệt,
-                            đổi chủ nhiều lần, trở thành biểu tượng của sự hy sinh và quyết tâm.
-                        </p>
-                        <p>
-                            Chiến thuật <strong>"vây lấn"</strong> phát huy hiệu quả: hệ thống hào giao thông của ta
-                            ngày càng siết chặt, sân bay Mường Thanh bị khống chế hoàn toàn. Từ ngày 28/3,
-                            không máy bay nào có thể hạ cánh — mọi tiếp tế phải thả dù, nhiều kiện hàng rơi vào trận địa
-                            ta.
-                            Phong trào <strong>"săn Tây bắn tỉa"</strong> khiến địch hoang mang, tuyệt vọng.
-                        </p>
+            <!-- PHASE 1 -->
+            <div class="battle-chapter reveal-up">
+                <div class="bc-header phase1">
+                    <div class="bc-header-fx">
+                        <div class="fx-burst"></div>
+                        <div class="fx-burst b2"></div>
+                        <div class="fx-burst b3"></div>
+                    </div>
+                    <span class="bc-date">13/3 – 17/3/1954</span>
+                    <div class="bc-phase-tag">Đợt 1</div>
+                    <h3 class="bc-title">Tiêu Diệt Cứ Điểm Vòng Ngoài</h3>
+                </div>
+                <div class="bc-moments">
+                    <div class="bc-moment">
+                        <span class="moment-icon">💥</span>
+                        <div><strong>17h ngày 13/3/1954</strong> — Pháo khai hỏa vào Him Lam (Béatrice), mở màn chiến dịch. Pháp kinh hoàng — không tin Việt Minh đưa được pháo lên núi.</div>
+
+                    <div class="bc-moment">
+                        <span class="moment-icon">📸</span>
+                        <div class="chapter-illustration reveal-up" style="margin:8px 0">
+                            <img src="images/him_lam_battle.png" alt="Trận Him Lam - Béatrice" loading="lazy">
+                            <div class="illustration-caption">Pháo binh Việt Minh khai hỏa vào cứ điểm Him Lam — 17h ngày 13/3/1954</div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="bc-moment">
+                        <span class="moment-icon">🔥</span>
+                        <div>5 ngày tiêu diệt <strong>Him Lam, Độc Lập (Gabrielle)</strong>, bức hàng <strong>Bản Kéo (Anne-Marie)</strong>.</div>
                     </div>
                 </div>
+                <div class="bc-stat-strip">
+                    <div class="bc-stat"><span class="bc-stat-val">2.000+</span><span class="bc-stat-lbl">Quân Pháp bị loại</span></div>
+                    <div class="bc-stat"><span class="bc-stat-val">25</span><span class="bc-stat-lbl">Máy bay phá hủy</span></div>
+                    <div class="bc-stat"><span class="bc-stat-val">3/49</span><span class="bc-stat-lbl">Cứ điểm chiếm</span></div>
+                </div>
+                <div class="bc-callout">
+                    <span class="callout-icon">⚠️</span>
+                    Đại tá <em>Charles Piroth</em> — chỉ huy pháo binh Pháp — tự sát vì bất lực, sau khi từng tuyên bố sẽ "bịt miệng" pháo Việt Minh.
+                </div>
+                <div class="battle-meter">
+                    <span class="meter-label">Kiểm soát</span>
+                    <div class="meter-track"><div class="meter-fill" data-progress="6"></div></div>
+                    <span class="meter-val">6%</span>
+                </div>
+            </div>
 
-                <!-- Phase 3 -->
-                <div class="timeline-item reveal-right">
-                    <div class="timeline-marker phase3-marker"></div>
-                    <div class="timeline-content phase3">
-                        <span class="timeline-date">1/5 – 7/5/1954</span>
-                        <span class="phase-badge">Đợt 3</span>
-                        <h3>Tổng Công Kích — Chiến Thắng Lịch Sử</h3>
-                        <p>
-                            Từ ngày 1/5, quân ta mở đợt tổng công kích vào toàn bộ cứ điểm còn lại.
-                            Đêm 6/5, bộ đội ta nạp gần <strong>1 tấn thuốc nổ</strong> vào đường hầm đào xuyên
-                            dưới đồi A1, cho nổ tung — mở đường cho đợt xung phong cuối cùng.
-                        </p>
-                        <p>
-                            <strong>17h30 ngày 7/5/1954</strong> — Quân đội nhân dân Việt Nam đánh chiếm
-                            Sở chỉ huy tập đoàn cứ điểm. Chuẩn tướng <em>Christian de Castries</em> cùng
-                            toàn bộ bộ tham mưu bị bắt sống.
-                        </p>
-                        <p class="victory-text">
-                            🚩 Lá cờ <strong>"Quyết chiến — Quyết thắng"</strong> tung bay trên nóc hầm De Castries,
-                            đánh dấu sự sụp đổ hoàn toàn của tập đoàn cứ điểm Điện Biên Phủ.
-                        </p>
+            <!-- PHASE 2 -->
+            <div class="battle-chapter reveal-up">
+                <div class="bc-header phase2">
+                    <div class="bc-header-fx">
+                        <div class="fx-burst"></div>
+                        <div class="fx-burst b2"></div>
                     </div>
+                    <span class="bc-date">30/3 – 30/4/1954</span>
+                    <div class="bc-phase-tag">Đợt 2</div>
+                    <h3 class="bc-title">Đánh Chiếm Dãy Đồi Phía Đông & Vây Lấn</h3>
+                </div>
+                <div class="bc-moments">
+                    <div class="bc-moment">
+                        <span class="moment-icon">⛰️</span>
+                        <div>Tấn công đồng loạt cao điểm phía Đông: <strong>đồi A1, C1, D1, E</strong> — then chốt khống chế Mường Thanh.</div>
+                    </div>
+                    <div class="bc-moment highlight-moment">
+                        <span class="moment-icon">🔥</span>
+                        <div><strong>Đồi A1</strong> (Éliane 2): <em>39 ngày đêm giằng co</em> — đổi chủ nhiều lần — biểu tượng hy sinh và quyết tâm.</div>
+
+                    <div class="bc-moment">
+                        <span class="moment-icon">📸</span>
+                        <div class="chapter-illustration reveal-up" style="margin:8px 0">
+                            <img src="images/hill_a1_combat.png" alt="Trận đồi A1 - Éliane 2" loading="lazy">
+                            <div class="illustration-caption">Đồi A1 (Éliane 2) — 39 ngày đêm giằng co ác liệt nhất chiến dịch</div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="bc-moment">
+                        <span class="moment-icon">✈️</span>
+                        <div>Từ <strong>28/3</strong>: không máy bay nào hạ cánh được — mọi tiếp tế thả dù, nhiều kiện rơi vào trận địa ta.</div>
+                    </div>
+                </div>
+                <div class="bc-stat-strip">
+                    <div class="bc-stat"><span class="bc-stat-val">39</span><span class="bc-stat-lbl">Ngày giằng co đồi A1</span></div>
+                    <div class="bc-stat"><span class="bc-stat-val">32/49</span><span class="bc-stat-lbl">Cứ điểm chiếm</span></div>
+                </div>
+                <!-- Territory Control Donut -->
+                <div class="territory-donut-wrap">
+                    <svg viewBox="0 0 160 160" class="territory-donut">
+                        <circle cx="80" cy="80" r="60" fill="none" stroke="rgba(231,76,60,0.2)" stroke-width="14"/>
+                        <circle cx="80" cy="80" r="60" fill="none" stroke="url(#gaugeGrad)" stroke-width="14" stroke-dasharray="377" stroke-dashoffset="377" class="td-fill" data-percent="65" stroke-linecap="round" transform="rotate(-90 80 80)"/>
+                        <text x="80" y="75" text-anchor="middle" fill="var(--gold)" font-size="22" font-weight="900" font-family="var(--font-heading)">65%</text>
+                        <text x="80" y="95" text-anchor="middle" fill="var(--text-muted)" font-size="9">KIỂM SOÁT</text>
+                    </svg>
+                    <div class="td-sides">
+                        <div class="td-side vn"><span class="td-dot vn-dot"></span> Việt Minh — 65%</div>
+                        <div class="td-side fr"><span class="td-dot fr-dot"></span> Pháp — 35%</div>
+                    </div>
+                </div>
+                <div class="bc-tactics">
+                    <span class="tactic-tag">Chiến thuật "Vây lấn"</span>
+                    <span class="tactic-tag">Phong trào "Săn Tây bắn tỉa"</span>
+                </div>
+                <div class="battle-meter">
+                    <span class="meter-label">Kiểm soát</span>
+                    <div class="meter-track"><div class="meter-fill" data-progress="65"></div></div>
+                    <span class="meter-val">65%</span>
+                </div>
+            </div>
+
+            <!-- PHASE 3: VICTORY -->
+            <div class="battle-chapter victory-chapter reveal-up">
+                <div class="bc-header phase3">
+                    <div class="bc-header-fx">
+                        <div class="fx-burst"></div>
+                        <div class="fx-burst b2"></div>
+                        <div class="fx-burst b3"></div>
+                    </div>
+                    <span class="bc-date">1/5 – 7/5/1954</span>
+                    <div class="bc-phase-tag">Đợt 3 — CHIẾN THẮNG</div>
+                    <h3 class="bc-title">Tổng Công Kích — Chiến Thắng Lịch Sử</h3>
+                </div>
+                <div class="bc-moments">
+                    <div class="bc-moment">
+                        <span class="moment-icon">💣</span>
+                        <div>Đêm <strong>6/5</strong>: nạp gần <strong>1 tấn thuốc nổ</strong> vào đường hầm dưới đồi A1, cho nổ tung — mở đường xung phong cuối cùng.</div>
+                    </div>
+                    <div class="bc-moment highlight-moment">
+                        <span class="moment-icon">🏆</span>
+                        <div><strong>17h30 ngày 7/5/1954</strong> — Quân đội NDVN đánh chiếm Sở chỉ huy. De Castries cùng toàn bộ bộ tham mưu bị bắt sống.</div>
+                    </div>
+                </div>
+                <!-- Territory Control: Total Victory Donut -->
+                <div class="territory-donut-wrap victory-donut">
+                    <svg viewBox="0 0 160 160" class="territory-donut">
+                        <circle cx="80" cy="80" r="60" fill="none" stroke="rgba(231,76,60,0.1)" stroke-width="14"/>
+                        <circle cx="80" cy="80" r="60" fill="none" stroke="url(#gaugeGrad)" stroke-width="14" stroke-dasharray="377" stroke-dashoffset="377" class="td-fill" data-percent="100" stroke-linecap="round" transform="rotate(-90 80 80)"/>
+                        <text x="80" y="72" text-anchor="middle" fill="var(--gold)" font-size="20" font-weight="900" font-family="var(--font-heading)">100%</text>
+                        <text x="80" y="92" text-anchor="middle" fill="var(--gold)" font-size="9" font-weight="700">TOÀN THẮNG</text>
+                    </svg>
+                </div>
+
+                <!-- Animated Flag-Raising Scene -->
+                <div class="flag-scene">
+                    <svg viewBox="0 0 400 180" class="flag-svg" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Bunker silhouette -->
+                        <rect x="120" y="130" width="160" height="50" rx="4" fill="rgba(100,100,80,0.3)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                        <rect x="140" y="140" width="30" height="20" rx="2" fill="rgba(80,80,60,0.4)"/>
+                        <rect x="230" y="140" width="30" height="20" rx="2" fill="rgba(80,80,60,0.4)"/>
+                        <polygon points="120,130 200,110 280,130" fill="rgba(80,80,60,0.25)"/>
+                        <!-- Ground -->
+                        <rect x="0" y="178" width="400" height="2" fill="rgba(241,196,15,0.1)"/>
+                        <!-- Flag pole -->
+                        <line x1="200" y1="30" x2="200" y2="120" stroke="#ccc" stroke-width="2.5" class="flag-pole"/>
+                        <circle cx="200" cy="28" r="3" fill="var(--gold)" class="flag-pole-top"/>
+                        <!-- Flag -->
+                        <g class="flag-wave">
+                            <rect x="202" y="32" width="60" height="40" rx="2" fill="#c0392b" class="flag-body"/>
+                            <polygon points="225,45 228,54 237,54 230,59 232,68 225,63 218,68 220,59 213,54 222,54" fill="#f1c40f" class="flag-star"/>
+                        </g>
+                        <!-- Soldiers silhouettes -->
+                        <g class="soldiers-group">
+                            <g class="soldier s1" transform="translate(140,100)">
+                                <circle cx="0" cy="0" r="5" fill="rgba(241,196,15,0.6)"/>
+                                <line x1="0" y1="5" x2="0" y2="25" stroke="rgba(241,196,15,0.5)" stroke-width="2"/>
+                                <line x1="0" y1="12" x2="-6" y2="20" stroke="rgba(241,196,15,0.4)" stroke-width="1.5"/>
+                                <line x1="0" y1="12" x2="8" y2="8" stroke="rgba(241,196,15,0.4)" stroke-width="1.5"/>
+                            </g>
+                            <g class="soldier s2" transform="translate(260,105)">
+                                <circle cx="0" cy="0" r="5" fill="rgba(241,196,15,0.6)"/>
+                                <line x1="0" y1="5" x2="0" y2="25" stroke="rgba(241,196,15,0.5)" stroke-width="2"/>
+                                <line x1="0" y1="12" x2="7" y2="19" stroke="rgba(241,196,15,0.4)" stroke-width="1.5"/>
+                                <line x1="0" y1="12" x2="-5" y2="7" stroke="rgba(241,196,15,0.4)" stroke-width="1.5"/>
+                            </g>
+                            <g class="soldier s3" transform="translate(170,115)">
+                                <circle cx="0" cy="0" r="4" fill="rgba(241,196,15,0.4)"/>
+                                <line x1="0" y1="4" x2="0" y2="20" stroke="rgba(241,196,15,0.35)" stroke-width="1.5"/>
+                            </g>
+                            <g class="soldier s4" transform="translate(235,110)">
+                                <circle cx="0" cy="0" r="4" fill="rgba(241,196,15,0.4)"/>
+                                <line x1="0" y1="4" x2="0" y2="20" stroke="rgba(241,196,15,0.35)" stroke-width="1.5"/>
+                            </g>
+                        </g>
+                        <!-- Victory rays -->
+                        <g class="victory-rays">
+                            <line x1="200" y1="50" x2="160" y2="10" stroke="rgba(241,196,15,0.15)" stroke-width="1" class="vray"/>
+                            <line x1="200" y1="50" x2="200" y2="5" stroke="rgba(241,196,15,0.2)" stroke-width="1" class="vray"/>
+                            <line x1="200" y1="50" x2="240" y2="10" stroke="rgba(241,196,15,0.15)" stroke-width="1" class="vray"/>
+                            <line x1="200" y1="50" x2="280" y2="30" stroke="rgba(241,196,15,0.1)" stroke-width="1" class="vray"/>
+                            <line x1="200" y1="50" x2="120" y2="30" stroke="rgba(241,196,15,0.1)" stroke-width="1" class="vray"/>
+                        </g>
+                        <!-- Spark particles -->
+                        <circle cx="180" cy="40" r="1.5" fill="#f1c40f" class="spark sp1"/>
+                        <circle cx="230" cy="35" r="1" fill="#f1c40f" class="spark sp2"/>
+                        <circle cx="210" cy="25" r="1.5" fill="#ff6" class="spark sp3"/>
+                        <circle cx="190" cy="50" r="1" fill="#f1c40f" class="spark sp4"/>
+                        <circle cx="250" cy="45" r="1" fill="#ff6" class="spark sp5"/>
+                        <!-- Caption -->
+                        <text x="200" y="175" text-anchor="middle" fill="var(--text-muted)" font-size="8" letter-spacing="2">LÁ CỜ QUYẾT CHIẾN QUYẾT THẮNG — 7/5/1954</text>
+                    </svg>
+                </div>
+
+                <div class="victory-banner-inline">
+                    <span class="vb-flag">🚩</span>
+                    <div>Lá cờ <strong>"Quyết chiến — Quyết thắng"</strong> tung bay trên nóc hầm De Castries, đánh dấu sự sụp đổ hoàn toàn của tập đoàn cứ điểm Điện Biên Phủ.</div>
+                </div>
+                <div class="battle-meter">
+                    <span class="meter-label">Kiểm soát</span>
+                    <div class="meter-track"><div class="meter-fill" data-progress="100"></div></div>
+                    <span class="meter-val">100% ⭐</span>
                 </div>
             </div>
         </div>
@@ -320,34 +854,92 @@
                 <div class="divider"></div>
             </div>
 
+            <!-- Shared SVG gradient for ring gauges -->
+            <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+                <defs>
+                    <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#c0392b"/>
+                        <stop offset="100%" stop-color="#f1c40f"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+
             <div class="stats-grid">
                 <div class="stat-card reveal-up">
-                    <div class="stat-number" data-target="56">0</div>
+                    <div class="stat-gauge">
+                        <svg viewBox="0 0 160 160" class="gauge-svg">
+                            <circle cx="80" cy="80" r="68" class="gauge-track"/>
+                            <circle cx="80" cy="80" r="68" class="gauge-fill" stroke="url(#gaugeGrad)" data-percent="93"/>
+                        </svg>
+                        <div class="gauge-center">
+                            <div class="stat-number" data-target="56">0</div>
+                        </div>
+                    </div>
                     <div class="stat-label">Ngày đêm chiến đấu</div>
                     <div class="stat-detail">13/3 — 7/5/1954</div>
                 </div>
                 <div class="stat-card reveal-up">
-                    <div class="stat-number" data-target="16200">0</div>
+                    <div class="stat-gauge">
+                        <svg viewBox="0 0 160 160" class="gauge-svg">
+                            <circle cx="80" cy="80" r="68" class="gauge-track"/>
+                            <circle cx="80" cy="80" r="68" class="gauge-fill" stroke="url(#gaugeGrad)" data-percent="100"/>
+                        </svg>
+                        <div class="gauge-center">
+                            <div class="stat-number" data-target="16200">0</div>
+                        </div>
+                    </div>
                     <div class="stat-label">Quân địch bị loại</div>
                     <div class="stat-detail">Tiêu diệt và bắt sống</div>
                 </div>
                 <div class="stat-card reveal-up">
-                    <div class="stat-number" data-target="62">0</div>
+                    <div class="stat-gauge">
+                        <svg viewBox="0 0 160 160" class="gauge-svg">
+                            <circle cx="80" cy="80" r="68" class="gauge-track"/>
+                            <circle cx="80" cy="80" r="68" class="gauge-fill" stroke="url(#gaugeGrad)" data-percent="78"/>
+                        </svg>
+                        <div class="gauge-center">
+                            <div class="stat-number" data-target="62">0</div>
+                        </div>
+                    </div>
                     <div class="stat-label">Máy bay bị bắn rơi</div>
                     <div class="stat-detail">Phá hủy hoàn toàn</div>
                 </div>
                 <div class="stat-card reveal-up">
-                    <div class="stat-number" data-target="260000">0</div>
+                    <div class="stat-gauge">
+                        <svg viewBox="0 0 160 160" class="gauge-svg">
+                            <circle cx="80" cy="80" r="68" class="gauge-track"/>
+                            <circle cx="80" cy="80" r="68" class="gauge-fill" stroke="url(#gaugeGrad)" data-percent="100"/>
+                        </svg>
+                        <div class="gauge-center">
+                            <div class="stat-number" data-target="260000">0</div>
+                        </div>
+                    </div>
                     <div class="stat-label">Dân công phục vụ</div>
                     <div class="stat-detail">Từ khắp miền Bắc</div>
                 </div>
                 <div class="stat-card reveal-up">
-                    <div class="stat-number" data-target="49">0</div>
+                    <div class="stat-gauge">
+                        <svg viewBox="0 0 160 160" class="gauge-svg">
+                            <circle cx="80" cy="80" r="68" class="gauge-track"/>
+                            <circle cx="80" cy="80" r="68" class="gauge-fill" stroke="url(#gaugeGrad)" data-percent="100"/>
+                        </svg>
+                        <div class="gauge-center">
+                            <div class="stat-number" data-target="49">0</div>
+                        </div>
+                    </div>
                     <div class="stat-label">Cứ điểm bị tiêu diệt</div>
                     <div class="stat-detail">Toàn bộ tập đoàn</div>
                 </div>
                 <div class="stat-card reveal-up">
-                    <div class="stat-number" data-target="64">0</div>
+                    <div class="stat-gauge">
+                        <svg viewBox="0 0 160 160" class="gauge-svg">
+                            <circle cx="80" cy="80" r="68" class="gauge-track"/>
+                            <circle cx="80" cy="80" r="68" class="gauge-fill" stroke="url(#gaugeGrad)" data-percent="72"/>
+                        </svg>
+                        <div class="gauge-center">
+                            <div class="stat-number" data-target="64">0</div>
+                        </div>
+                    </div>
                     <div class="stat-label">Xe cơ giới thu giữ</div>
                     <div class="stat-detail">Cùng toàn bộ vũ khí</div>
                 </div>
@@ -364,44 +956,92 @@
                 <div class="divider"></div>
             </div>
 
-            <div class="significance-grid">
-                <div class="sig-card reveal-left">
-                    <div class="sig-icon">🇻🇳</div>
-                    <h3>Đối Với Việt Nam</h3>
-                    <ul>
-                        <li>Chấm dứt hoàn toàn ách thống trị gần 100 năm của thực dân Pháp trên đất Việt Nam và Đông
-                            Dương.</li>
-                        <li>Bảo vệ và phát triển thành quả Cách mạng tháng Tám 1945, giải phóng miền Bắc.</li>
-                        <li>Trực tiếp dẫn đến <strong>Hiệp định Genève</strong> (21/7/1954) — Pháp công nhận độc lập,
-                            chủ quyền của Việt Nam.</li>
-                        <li>Khẳng định đường lối kháng chiến đúng đắn của Đảng và Chủ tịch Hồ Chí Minh.</li>
-                        <li>Tạo tiền đề vững chắc cho cuộc đấu tranh thống nhất đất nước sau này.</li>
-                    </ul>
+            <div class="impact-cascade">
+                <!-- Vietnam Impacts -->
+                <div class="impact-column reveal-left">
+                    <div class="impact-header-badge">
+                        <span class="impact-flag">🇻🇳</span>
+                        <h3>Đối Với Việt Nam</h3>
+                    </div>
+                    <div class="impact-item" style="--i:0">
+                        <div class="impact-num">01</div>
+                        <p>Chấm dứt hoàn toàn ách thống trị gần 100 năm của thực dân Pháp trên đất Việt Nam và Đông Dương.</p>
+                    </div>
+                    <div class="impact-item" style="--i:1">
+                        <div class="impact-num">02</div>
+                        <p>Bảo vệ và phát triển thành quả Cách mạng tháng Tám 1945, giải phóng miền Bắc.</p>
+                    </div>
+                    <div class="impact-item" style="--i:2">
+                        <div class="impact-num">03</div>
+                        <p>Trực tiếp dẫn đến <strong>Hiệp định Genève</strong> (21/7/1954) — Pháp công nhận độc lập, chủ quyền của Việt Nam.</p>
+                    </div>
+                    <div class="impact-item" style="--i:3">
+                        <div class="impact-num">04</div>
+                        <p>Khẳng định đường lối kháng chiến đúng đắn của Đảng và Chủ tịch Hồ Chí Minh.</p>
+                    </div>
+                    <div class="impact-item" style="--i:4">
+                        <div class="impact-num">05</div>
+                        <p>Tạo tiền đề vững chắc cho cuộc đấu tranh thống nhất đất nước sau này.</p>
+                    </div>
                 </div>
-                <div class="sig-card reveal-right">
-                    <div class="sig-icon">🌍</div>
-                    <h3>Đối Với Thế Giới</h3>
-                    <ul>
-                        <li>Là cột mốc đánh dấu <strong>sự sụp đổ của chủ nghĩa thực dân cũ</strong> trên toàn cầu.</li>
-                        <li>Lần đầu tiên trong lịch sử, một dân tộc thuộc địa đánh bại hoàn toàn quân đội viễn chinh của
-                            một cường quốc phương Tây trong trận quyết chiến lớn.</li>
-                        <li>Cổ vũ mạnh mẽ phong trào giải phóng dân tộc tại Châu Á, Châu Phi và Mỹ Latinh — hàng loạt
-                            thuộc địa Pháp tại Bắc Phi giành được độc lập sau đó.</li>
-                        <li>Chứng minh chân lý: một dân tộc dù nhỏ bé, nếu biết đoàn kết và chiến đấu vì chính nghĩa, có
-                            thể chiến thắng bất kỳ kẻ thù xâm lược nào.</li>
-                    </ul>
+
+                <!-- Epicenter Shockwave -->
+                <div class="impact-epicenter reveal-up">
+                    <div class="epicenter-core"><span>⚡</span></div>
+                    <div class="epicenter-ring r1"></div>
+                    <div class="epicenter-ring r2"></div>
+                    <div class="epicenter-ring r3"></div>
+                    <div class="epicenter-label">Chấn Động<br>Địa Cầu</div>
+                </div>
+
+                <!-- World Impacts -->
+                <div class="impact-column reveal-right">
+                    <div class="impact-header-badge">
+                        <span class="impact-flag">🌍</span>
+                        <h3>Đối Với Thế Giới</h3>
+                    </div>
+                    <div class="impact-item" style="--i:0">
+                        <div class="impact-num">01</div>
+                        <p>Là cột mốc đánh dấu <strong>sự sụp đổ của chủ nghĩa thực dân cũ</strong> trên toàn cầu.</p>
+                    </div>
+                    <div class="impact-item" style="--i:1">
+                        <div class="impact-num">02</div>
+                        <p>Lần đầu tiên trong lịch sử, một dân tộc thuộc địa đánh bại hoàn toàn quân đội viễn chinh của một cường quốc phương Tây trong trận quyết chiến lớn.</p>
+                    </div>
+                    <div class="impact-item" style="--i:2">
+                        <div class="impact-num">03</div>
+                        <p>Cổ vũ mạnh mẽ phong trào giải phóng dân tộc tại Châu Á, Châu Phi và Mỹ Latinh — hàng loạt thuộc địa Pháp tại Bắc Phi giành được độc lập sau đó.</p>
+                    </div>
+                    <div class="impact-item" style="--i:3">
+                        <div class="impact-num">04</div>
+                        <p>Chứng minh chân lý: một dân tộc dù nhỏ bé, nếu biết đoàn kết và chiến đấu vì chính nghĩa, có thể chiến thắng bất kỳ kẻ thù xâm lược nào.</p>
+                    </div>
                 </div>
             </div>
 
             <div class="geneva-card reveal-up">
-                <div class="geneva-icon">📜</div>
-                <h3>Hiệp Định Genève — 21/7/1954</h3>
+                <div class="geneva-ornament top-ornament">❧ ❧ ❧</div>
+                <div class="geneva-seal-wrap">
+                    <div class="geneva-seal">
+                        <div class="seal-outer"></div>
+                        <div class="seal-inner">☆</div>
+                    </div>
+                </div>
+                <h3>Hiệp Định Genève</h3>
+                <div class="geneva-date-formal">Ngày 21 tháng 7 năm 1954 • Genève, Thụy Sĩ</div>
+                <div class="geneva-rule"></div>
                 <p>
-                    Chiến thắng Điện Biên Phủ buộc Pháp phải ngồi vào bàn đàm phán tại Hội nghị Genève (Thụy Sĩ).
+                    Chiến thắng Điện Biên Phủ buộc Pháp phải ngồi vào bàn đàm phán tại Hội nghị Genève.
                     Hiệp định được ký kết, công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ
                     của ba nước Việt Nam, Lào, Campuchia. Pháp rút toàn bộ quân viễn chinh khỏi Đông Dương,
                     chấm dứt gần một thế kỷ đô hộ.
                 </p>
+
+                <div class="chapter-illustration reveal-up" style="margin-top:20px">
+                    <img src="images/geneva_conference.png" alt="Hội nghị Genève 1954" loading="lazy">
+                    <div class="illustration-caption">Hội nghị Genève — 21/7/1954, Thụy Sĩ</div>
+                </div>
+                <div class="geneva-ornament bottom-ornament">❧ ❧ ❧</div>
             </div>
         </div>
     </section>
@@ -415,36 +1055,36 @@
                 <div class="divider"></div>
             </div>
 
-            <div class="team-members reveal-up">
-                <h3>👥 Thành Viên Nhóm</h3>
-                <div class="members-grid">
-                    <div class="member-card">
-                        <div class="member-avatar">NTĐ</div>
-                        <div class="member-info">
-                            <h4>Nguyễn Thành Đạt</h4>
-                            <p class="member-role">Thiết kế & Phát triển</p>
+            <div class="hex-formation reveal-up">
+                <h3 class="hex-title">⭐ Thành Viên Nhóm</h3>
+                <div class="hex-grid">
+                    <div class="hex-member">
+                        <div class="hex-shape">
+                            <div class="hex-inner">NTĐ</div>
                         </div>
+                        <h4>Nguyễn Thành Đạt</h4>
+                        <span class="hex-rank">Thiết kế & Phát triển</span>
                     </div>
-                    <div class="member-card">
-                        <div class="member-avatar">VVT</div>
-                        <div class="member-info">
-                            <h4>Võ Việt Thắng</h4>
-                            <p class="member-role">Nội dung</p>
+                    <div class="hex-member">
+                        <div class="hex-shape">
+                            <div class="hex-inner">VVT</div>
                         </div>
+                        <h4>Võ Việt Thắng</h4>
+                        <span class="hex-rank">Nội dung</span>
                     </div>
-                    <div class="member-card">
-                        <div class="member-avatar">NBD</div>
-                        <div class="member-info">
-                            <h4>Nguyễn Bách Duy Hoàng</h4>
-                            <p class="member-role">Ý tưởng</p>
+                    <div class="hex-member">
+                        <div class="hex-shape">
+                            <div class="hex-inner">NBD</div>
                         </div>
+                        <h4>Nguyễn Bách Duy Hoàng</h4>
+                        <span class="hex-rank">Ý tưởng</span>
                     </div>
-                    <div class="member-card">
-                        <div class="member-avatar">PĐK</div>
-                        <div class="member-info">
-                            <h4>Phạm Đăng Khôi</h4>
-                            <p class="member-role">Thuyết trình</p>
+                    <div class="hex-member">
+                        <div class="hex-shape">
+                            <div class="hex-inner">PĐK</div>
                         </div>
+                        <h4>Phạm Đăng Khôi</h4>
+                        <span class="hex-rank">Thuyết trình</span>
                     </div>
                 </div>
             </div>
@@ -460,53 +1100,28 @@
                 <div class="divider"></div>
             </div>
 
-            <div class="creation-grid">
-                <div class="creation-step reveal-left">
-                    <div class="step-number">01</div>
-                    <div class="step-content">
-                        <h3>🤖 Công Cụ AI</h3>
-                        <p>
-                            Trang web được xây dựng với sự hỗ trợ của <strong>Gemini AI (Antigravity)</strong> —
-                            công cụ AI coding agent của Google DeepMind, tích hợp trực tiếp trong VS Code.
-                            AI giúp generate code HTML, CSS, JavaScript và tạo hình ảnh minh họa.
-                        </p>
-                        <div class="tech-tags">
-                            <span class="tech-tag">Gemini AI</span>
-                            <span class="tech-tag">VS Code</span>
-                            <span class="tech-tag">Antigravity Agent</span>
-                        </div>
-                    </div>
+            <div class="pipeline-flow">
+                <div class="pipe-node reveal-up">
+                    <div class="pipe-icon">🤖</div>
+                    <h3>Công Cụ AI</h3>
+                    <div class="pipe-detail">Gemini AI (Antigravity) — AI coding agent trong VS Code, generate code & hình ảnh.</div>
+                    <div class="tech-tags"><span class="tech-tag">Gemini AI</span><span class="tech-tag">VS Code</span></div>
                 </div>
+                <div class="pipe-connector"><div class="pipe-flow-dot"></div></div>
 
-                <div class="creation-step reveal-right">
-                    <div class="step-number">02</div>
-                    <div class="step-content">
-                        <h3>💻 Công Nghệ</h3>
-                        <p>
-                            Trang web sử dụng các công nghệ web tiêu chuẩn:
-                            <strong>HTML5</strong> cho cấu trúc, <strong>CSS3</strong> cho giao diện
-                            (bao gồm animations, glassmorphism, responsive design),
-                            và <strong>Vanilla JavaScript</strong> cho tương tác và hệ thống hỏi đáp AI.
-                        </p>
-                        <div class="tech-tags">
-                            <span class="tech-tag">HTML5</span>
-                            <span class="tech-tag">CSS3</span>
-                            <span class="tech-tag">JavaScript</span>
-                            <span class="tech-tag">Google Fonts</span>
-                        </div>
-                    </div>
+                <div class="pipe-node reveal-up">
+                    <div class="pipe-icon">💻</div>
+                    <h3>Công Nghệ</h3>
+                    <div class="pipe-detail">HTML5 + CSS3 + Vanilla JavaScript — animations, glassmorphism, responsive.</div>
+                    <div class="tech-tags"><span class="tech-tag">HTML5</span><span class="tech-tag">CSS3</span><span class="tech-tag">JavaScript</span></div>
                 </div>
+                <div class="pipe-connector"><div class="pipe-flow-dot"></div></div>
 
-                <div class="creation-step reveal-left" style="grid-column: 1 / -1;">
-                    <div class="step-number">03</div>
-                    <div class="step-content" style="flex: 1;">
-                        <h3>📝 Prompt Sử Dụng</h3>
-                        <p>
-                            Các prompt chính được sử dụng để tạo trang web. Nhấn <strong>"Xem chi tiết"</strong> để xem
-                            toàn bộ prompt và <strong>"Sao chép"</strong> để copy.
-                        </p>
-                        <div class="prompt-list">
-
+                <div class="pipe-node wide reveal-up">
+                    <div class="pipe-icon">📝</div>
+                    <h3>Prompt Sử Dụng</h3>
+                    <div class="pipe-detail">Nhấn <strong>"Xem chi tiết"</strong> để xem prompt, <strong>"Sao chép"</strong> để copy.</div>
+                    <div class="prompt-list">
                             <!-- Prompt 1: Tạo trang web -->
                             <div class="prompt-item">
                                 <div class="prompt-header">
@@ -630,26 +1245,15 @@ Section 2 — Cách tạo ra trang web:
                             </div>
 
                         </div>
-                    </div>
-                </div>
 
-                <div class="creation-step reveal-right">
-                    <div class="step-number">04</div>
-                    <div class="step-content">
-                        <h3>🎨 Thiết Kế</h3>
-                        <p>
-                            Giao diện được thiết kế theo phong cách <strong>premium & cinematic</strong>,
-                            lấy cảm hứng từ tông màu quân đội — xanh olive, vàng kim, đỏ thẫm.
-                            Sử dụng hiệu ứng parallax, scroll animations, glassmorphism
-                            và hệ thống particle cho phần hero.
-                        </p>
-                        <div class="tech-tags">
-                            <span class="tech-tag">Parallax</span>
-                            <span class="tech-tag">Glassmorphism</span>
-                            <span class="tech-tag">Particles</span>
-                            <span class="tech-tag">Responsive</span>
-                        </div>
                     </div>
+                <div class="pipe-connector"><div class="pipe-flow-dot"></div></div>
+
+                <div class="pipe-node reveal-up">
+                    <div class="pipe-icon">🎨</div>
+                    <h3>Thiết Kế</h3>
+                    <div class="pipe-detail">Phong cách premium & cinematic — xanh olive, vàng kim, đỏ thẫm. Parallax, glassmorphism, particles.</div>
+                    <div class="tech-tags"><span class="tech-tag">Parallax</span><span class="tech-tag">Glassmorphism</span><span class="tech-tag">Particles</span><span class="tech-tag">Responsive</span></div>
                 </div>
             </div>
         </div>
