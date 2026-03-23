@@ -149,6 +149,92 @@ document.addEventListener('DOMContentLoaded', () => {
 
     statNumbers.forEach(el => counterObserver.observe(el));
 
+    // ── Gauge Ring Animation ──
+    const gaugeFills = document.querySelectorAll('.gauge-fill');
+    const GAUGE_CIRCUMFERENCE = 2 * Math.PI * 68; // matches SVG r=68
+
+    const gaugeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const percent = parseFloat(entry.target.getAttribute('data-percent'));
+                const offset = GAUGE_CIRCUMFERENCE * (1 - percent / 100);
+                entry.target.style.strokeDashoffset = offset;
+                gaugeObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    gaugeFills.forEach(el => gaugeObserver.observe(el));
+
+    // ── Battle Meter Animation ──
+    const meterFills = document.querySelectorAll('.meter-fill');
+    const meterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const progress = entry.target.getAttribute('data-progress');
+                setTimeout(() => {
+                    entry.target.style.width = progress + '%';
+                }, 400);
+                meterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+    meterFills.forEach(el => meterObserver.observe(el));
+
+    // ── War Timeline Progress Animation ──
+    const wtProgressBars = document.querySelectorAll('.wt-progress');
+    const wtObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const bars = document.querySelectorAll('.wt-progress');
+                bars.forEach((bar, i) => {
+                    const progress = bar.getAttribute('data-progress');
+                    setTimeout(() => {
+                        bar.style.width = progress + '%';
+                    }, i * 600);
+                });
+                wtObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+    if (wtProgressBars.length > 0) {
+        wtObserver.observe(wtProgressBars[0]);
+    }
+
+    // ── Hero Day Counter Animation ──
+    const dayNums = document.querySelectorAll('.day-num[data-target]');
+    dayNums.forEach(el => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        observer.observe(el);
+    });
+
+    // ── 3D Tilt on Hover ──
+    const tiltTargets = document.querySelectorAll('.story-chapter, .stat-card, .impact-item, .hex-member, .battle-chapter, .pipe-node');
+    tiltTargets.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -4;
+            const rotateY = ((x - centerX) / centerX) * 4;
+            card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+            card.style.transition = 'transform 0.1s ease';
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+            card.style.transition = 'transform 0.4s ease';
+        });
+    });
+
     // ── Parallax Hero ──
     const hero = document.querySelector('.hero');
 
@@ -161,6 +247,75 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('scroll', parallax, { passive: true });
+
+    // ── Animated Siege Trench Rings ──
+    const trenchRings = document.querySelectorAll('.trench-ring');
+    if (trenchRings.length > 0) {
+        const siegeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    trenchRings.forEach((ring, i) => {
+                        setTimeout(() => {
+                            ring.classList.add('visible');
+                        }, i * 600);
+                    });
+                    siegeObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        siegeObserver.observe(trenchRings[0].closest('.siege-diagram') || trenchRings[0]);
+    }
+
+    // ── Force Comparison Bar Animation ──
+    const forceBars = document.querySelectorAll('.force-bar[data-width]');
+    if (forceBars.length > 0) {
+        const forceObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.force-bar[data-width]');
+                    bars.forEach((bar, i) => {
+                        setTimeout(() => {
+                            bar.style.width = bar.getAttribute('data-width') + '%';
+                        }, i * 200);
+                    });
+                    forceObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        const forceComp = document.querySelector('.force-comparison');
+        if (forceComp) forceObserver.observe(forceComp);
+    }
+
+    // ── Territory Donut Animation ──
+    const tdFills = document.querySelectorAll('.td-fill[data-percent]');
+    const TD_CIRCUMFERENCE = 2 * Math.PI * 60; // r=60
+
+    const tdObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const percent = parseFloat(entry.target.getAttribute('data-percent'));
+                const offset = TD_CIRCUMFERENCE * (1 - percent / 100);
+                entry.target.style.strokeDashoffset = offset;
+                tdObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    tdFills.forEach(el => tdObserver.observe(el));
+
+    // ── Flag Scene Animation ──
+    const flagScene = document.querySelector('.flag-scene');
+    if (flagScene) {
+        const flagObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    flagScene.classList.add('visible');
+                    flagObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        flagObserver.observe(flagScene);
+    }
 
     // ── Smooth anchor scrolling ──
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
