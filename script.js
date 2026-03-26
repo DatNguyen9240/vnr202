@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 className: 'french-marker',
                 html: `<div class="${dotClass}"></div>`,
                 iconSize: size,
-                iconAnchor: [size[0]/2, size[1]/2]
+                iconAnchor: [size[0] / 2, size[1] / 2]
             });
 
             const marker = L.marker([lat, lng], { icon }).addTo(dbpMap);
@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 className: 'french-marker',
                 html: `<div class="${dotClass}"></div>`,
                 iconSize: size,
-                iconAnchor: [size[0]/2, size[1]/2]
+                iconAnchor: [size[0] / 2, size[1] / 2]
             });
 
             const marker = L.marker([pos.lat, pos.lng], { icon }).addTo(siegeMap);
@@ -734,7 +734,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //  CHATBOT — Gemini API
     // ═══════════════════════════════════════════
 
-    const GEMINI_API_KEY = 'AIzaSyBvzvafOjh8Tv63Y5_6iUfO-NCBCquBYv4';
+    const GEMINI_API_KEY = 'AIzaSyCnvJolLrA9Xl502CyMLq5htLQEElOcXco';
     const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
     const SYSTEM_PROMPT = `Bạn là một trợ lý AI chuyên gia về Chiến dịch Điện Biên Phủ (1954). Hãy trả lời các câu hỏi dựa trên kiến thức sau đây. Trả lời bằng tiếng Việt, ngắn gọn, chính xác và dễ hiểu. Sử dụng markdown đơn giản (bold, list) khi cần thiết.
