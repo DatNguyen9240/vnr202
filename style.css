@@ -4610,3 +4610,229 @@ img {
         font-size: 5rem;
     }
 }
+/* === Causes Section === */
+.causes-section {
+    background: linear-gradient(135deg, rgba(192, 57, 43, 0.08), rgba(10, 10, 15, 0.8));
+}
+
+.causes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.cause-card {
+    background: linear-gradient(135deg, rgba(192, 57, 43, 0.1), rgba(241, 196, 15, 0.05));
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: 32px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.cause-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(241, 196, 15, 0.2), transparent);
+    transition: var(--transition);
+}
+
+.cause-card:hover {
+    background: linear-gradient(135deg, rgba(192, 57, 43, 0.15), rgba(241, 196, 15, 0.1));
+    border-color: var(--gold);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(192, 57, 43, 0.3);
+}
+
+.cause-card:hover::before {
+    left: 100%;
+}
+
+.cause-num {
+    font-family: var(--font-heading);
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: var(--gold);
+    margin-bottom: 12px;
+    text-shadow: 0 2px 8px rgba(241, 196, 15, 0.3);
+}
+
+.cause-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+}
+
+.cause-card p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* === Lessons Section === */
+.lessons-section {
+    background: linear-gradient(135deg, rgba(241, 196, 15, 0.08), rgba(10, 10, 15, 0.8));
+}
+
+.lessons-timeline {
+    position: relative;
+    margin-top: 40px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.lessons-timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--gold), transparent);
+    opacity: 0.3;
+}
+
+.lesson-item {
+    position: relative;
+    margin-bottom: 32px;
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(241, 196, 15, 0.08), rgba(192, 57, 43, 0.05));
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    transition: var(--transition);
+}
+
+.lesson-item:nth-child(odd) {
+    margin-left: 0;
+    margin-right: auto;
+    width: 48%;
+}
+
+.lesson-item:nth-child(even) {
+    margin-left: auto;
+    margin-right: 0;
+    width: 48%;
+}
+
+.lesson-item:hover {
+    background: linear-gradient(135deg, rgba(241, 196, 15, 0.12), rgba(192, 57, 43, 0.1));
+    border-color: var(--gold);
+    transform: translateX(8px);
+    box-shadow: 0 8px 30px rgba(241, 196, 15, 0.15);
+}
+
+.lesson-marker {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: var(--gold);
+    border: 3px solid var(--bg-dark);
+    border-radius: 50%;
+    top: 32px;
+    transition: var(--transition);
+}
+
+.lesson-item:nth-child(odd) .lesson-marker {
+    right: -40px;
+}
+
+.lesson-item:nth-child(even) .lesson-marker {
+    left: -40px;
+}
+
+.lesson-item:hover .lesson-marker {
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 0 12px var(--gold);
+}
+
+.lesson-content h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+}
+
+.lesson-content p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .lessons-timeline::before {
+        display: none;
+    }
+
+    .lesson-item:nth-child(odd),
+    .lesson-item:nth-child(even) {
+        width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .lesson-marker {
+        display: none;
+    }
+}
+
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 32px;
+}
+
+.route-stop {
+    text-align: center;
+}
+
+.stop-beacon {
+    font-size: 2.8rem;
+    margin-bottom: 8px;
+}
+
+.stop-value {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.stop-label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.route-path {
+    flex: 1;
+    min-width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 20px 16px;
+    position: relative;
+}
+
+.path-flow {
+    position: absolute;
+    height: 100%;
+    background: var(--gold);
+    animation: flow 2s ease-in-out infinite;
+}
+
+@keyframes flow {
+    0%, 100% { width: 0; left: 0; }
+    50% { width: 100%; left: 0; }
+    100% { width: 0; right: 0; }
+}
